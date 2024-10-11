@@ -7,4 +7,12 @@ public class Bid
     public string BidderId { get; set; }
     public decimal Amount { get; set; }
     public DateTime BidTime { get; set; }
+
+    public Bid(int auctionId, string bidderId, decimal amount, DateTime bidTime)
+    {
+        AuctionId = auctionId;
+        BidderId = bidderId;
+        Amount = amount;
+        BidTime = bidTime;
+    }
 }
