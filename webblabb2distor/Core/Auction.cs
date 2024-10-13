@@ -8,15 +8,16 @@ public class Auction
     public decimal StartingPrice { get; set; }
     public DateTime EndDate { get; set; }
     public string SellerId { get; set; }
-    public List<Bid> Bids { get; set; } = new List<Bid>();
+    public List<Bid> Bids { get; set; }
 
-    public Auction(string name, string description, decimal startingPrice, DateTime endDate, string sellerId)
+    public Auction(int id, string name, string description, decimal startingPrice, DateTime endDate, string sellerId)
     {
+        Id = id;
         Name = name;
         Description = description;
         StartingPrice = startingPrice;
         EndDate = endDate;
         SellerId = sellerId;
+        Bids = new List<Bid>(); 
     }
-    
 }

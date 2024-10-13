@@ -4,33 +4,38 @@ namespace webblabb2distor.Core.Services;
 
 public class AuctionService : IAuctionService
 {
+    private readonly List<Auction> _auctions = new List<Auction>();
     public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string sellerId)
-    {
-        throw new NotImplementedException();
+    { 
+        _auctions.Add(new Auction(_auctions.Count + 1, name, description, startingPrice, endDate, sellerId));
     }
 
     public void EditDescription(int auctionId, string newDescription)
     {
-        throw new NotImplementedException();
+        var auction = _auctions.Find(auction => auction.Id == auctionId);
+        if (auction != null)
+        {
+            auction.Description = newDescription;
+        }
     }
 
     public IEnumerable<Auction> GetAllActiveAuctions()
     {
-        throw new NotImplementedException();
+        return _auctions.Where(auction => auction.EndDate <= DateTime.Now);
     }
 
     public Auction GetDetails(int auctionId)
     {
-        throw new NotImplementedException();
+        return _auctions.Find(auction => auction.Id == auctionId);
     }
 
     public IEnumerable<Auction> GetAuctionsByUserId(string userId)
     {
-        throw new NotImplementedException();
+        return _auctions.Where(a => a.SellerId == userId);
     }
 
     public IEnumerable<Auction> GetWonAuctions(string userId)
     {
-        throw new NotImplementedException();
+        return _auctions.Where(a => a.Bids.Any(b => b.BidderId == userId && b.Amount == a.Bids.Max(bid => bid.Amount))&& a.EndDate < DateTime.Now);
     }
 }
