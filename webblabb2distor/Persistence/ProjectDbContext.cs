@@ -1,35 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace webblabb2distor.Persistence;
 
 public class ProjectDbContext : DbContext
 {
     public ProjectDbContext(DbContextOptions<ProjectDbContext> options) : base(options) { }
+
     public DbSet<TaskDb> TasksDbs { get; set; }
     public DbSet<ProjectDb> ProjectDbs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        ProjectDb pdb = new ProjectDb
+        // Seeding initial data
+        modelBuilder.Entity<ProjectDb>().HasData(new ProjectDb
         {
-            Id = -1,
+            Id = 4,
             Title = "testlearn Aspnet",
             CreatedDate = DateTime.Now,
-            TaskDbs = new List<TaskDb>()
-        };
-        modelBuilder.Entity<TaskDb>().HasData(pdb);
+        });
 
-        TaskDb tbd2 = new TaskDb()
+        modelBuilder.Entity<TaskDb>().HasData(new TaskDb
         {
-            id = -1,
+            Id = 2,
             Description = "test test la la",
             LastUpdated = DateTime.Now,
-            ProjectId = -1,
-        };
-        
-        modelBuilder.Entity<TaskDb>().HasData(tbd2);
-        
-
+            ProjectId = 3,
+        });
     }
-    
 }
