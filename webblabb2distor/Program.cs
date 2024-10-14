@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using webblabb2distor.Persistence;
+using Microsoft.AspNetCore.Identity;
+using webblabb2distor.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ProjectDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("ProjectDbConnection")));
+
+builder.Services.AddDefaultIdentity<webblabb2distorUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<webblabb2distorContext>();
 
 var app = builder.Build();
 
