@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webblabb2distor.Persistence;
 
@@ -8,12 +9,15 @@ public class TaskDb
     public int id { get; set; }
     [Required]
     [MaxLength(64)]
-    public string Title { get; set; }
-    [Required]
-    public string Username { get; set; }
+    public string Description { get; set; }
+  
+    
     [Required]
     [DataType(DataType.DateTime)]
-    public DateTime CreationDate { get; set; }
+    public DateTime LastUpdated { get; set; }
+
+    [ForeignKey("projectId")]
+    public ProjectDb Project { get; set; }
+    public int ProjectId { get; set; }
     
-    public List<TaskDb> TaskDbs { get; set; } = new List<TaskDb>();
 }

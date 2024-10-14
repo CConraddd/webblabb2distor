@@ -1,8 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using webblabb2distor.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<ProjectDbContext>(options =>
+    options.UseMySQL(builder.Configuration.GetConnectionString("ProjectDbConnection")));
 
 var app = builder.Build();
 
