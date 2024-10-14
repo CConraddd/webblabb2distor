@@ -14,11 +14,16 @@ public class BidService : IBidService
     public void PlaceBid(int auctionId, string bidderId, decimal bidAmount)
     {
         var auction = _auctionService.GetDetails(auctionId);
-        if (auction is null || auction.EndDate < DateTime.Now)
+        if (auction is null || auction.EndDateTime < DateTime.Now)
         {
             throw new InvalidOperationException("Auction is either invalid, or end date is invalid.");
         }
         decimal highestBid;
+
+        if (auction.SellerId == bidderId)
+        {
+            throw new InvalidOperationException("You cannot place bid on your own auction.");
+        }
         if (auction.Bids.Any())
         {
             highestBid = auction.Bids.Max(b => b.Amount);
@@ -27,7 +32,6 @@ public class BidService : IBidService
         {
             highestBid = auction.StartingPrice;
         }
-
         if (bidAmount <= highestBid)
         {
             throw new InvalidOperationException("Bid is not higher than the highest bid.");

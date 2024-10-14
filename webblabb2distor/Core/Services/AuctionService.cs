@@ -21,7 +21,7 @@ public class AuctionService : IAuctionService
 
     public IEnumerable<Auction> GetAllActiveAuctions()
     {
-        return _auctions.Where(auction => auction.EndDate <= DateTime.Now);
+        return _auctions.Where(auction => auction.EndDateTime <= DateTime.Now);
     }
 
     public Auction GetDetails(int auctionId)
@@ -36,6 +36,6 @@ public class AuctionService : IAuctionService
 
     public IEnumerable<Auction> GetWonAuctions(string userId)
     {
-        return _auctions.Where(a => a.Bids.Any(b => b.BidderId == userId && b.Amount == a.Bids.Max(bid => bid.Amount))&& a.EndDate < DateTime.Now);
+        return _auctions.Where(a => a.Bids.Any(b => b.BidderId == userId && b.Amount == a.Bids.Max(bid => bid.Amount))&& a.EndDateTime < DateTime.Now);
     }
 }

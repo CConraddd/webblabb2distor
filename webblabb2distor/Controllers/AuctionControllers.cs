@@ -1,9 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using webblabb2distor.Core.Interfaces;
 
 namespace webblabb2distor.Controllers
 {
     public class AuctionControllers : Controller
     {
+        private IAuctionService _auctionService;
+
+        public AuctionControllers(IAuctionService auctionService)
+        {
+            _auctionService = auctionService;
+        }
         // GET: AuctionControllers
         public ActionResult Index()
         {

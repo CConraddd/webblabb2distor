@@ -3,11 +3,15 @@ using webblabb2distor.Persistence;
 using Microsoft.AspNetCore.Identity;
 using webblabb2distor.Areas.Identity.Data;
 using webblabb2distor.Data;
+using webblabb2distor.Core.Interfaces;
+using webblabb2distor.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IAuctionService, AuctionService>();
 
 builder.Services.AddDbContext<ProjectDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("ProjectDbConnection")));
