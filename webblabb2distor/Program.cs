@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using webblabb2distor.Persistence;
 using Microsoft.AspNetCore.Identity;
+using webblabb2distor.Areas.Identity.Data;
 using webblabb2distor.Data;
 
 var builder = WebApplication.CreateBuilder(args);
