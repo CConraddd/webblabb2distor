@@ -15,7 +15,8 @@ builder.Services.AddScoped<IAuctionService, AuctionService>();
 
 builder.Services.AddDbContext<ProjectDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("ProjectDbConnection")));
-
+builder.Services.AddDbContext<UserDbcontext>(options =>    
+    options.UseMySQL(builder.Configuration.GetConnectionString("IdentityDbConnection")));
 builder.Services.AddDefaultIdentity<webblabb2distorUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<webblabb2distorContext>();
 
 var app = builder.Build();
@@ -34,7 +35,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

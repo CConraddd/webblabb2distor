@@ -7,19 +7,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webblabb2distor.Persistence;
 
-public class TaskDb
+public class BidsDb
 {
     [Key]
     public int Id { get; set; } // Use 'Id' for consistency
+ 
     [Required]
-    [MaxLength(64)]
-    public string Description { get; set; }
-
+    public decimal Bidamount { get; set; }
+    [Required]
+    public string Biddername { get; set; }
+    
+    
     [Required]
     [DataType(DataType.DateTime)]
-    public DateTime LastUpdated { get; set; }
+    public DateTime Bidtime { get; set; }
 
     [ForeignKey("Project")]
     public int ProjectId { get; set; }
-    public ProjectDb Project { get; set; }
+    public AuctionDB Auction { get; set; }
 }
