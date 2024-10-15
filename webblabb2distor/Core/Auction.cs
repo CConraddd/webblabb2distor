@@ -7,10 +7,10 @@ public class Auction
     public string Description { get; set; }
     public decimal StartingPrice { get; set; }
     public DateTime EndDateTime { get; set; }
-    public string SellerId { get; set; }
+    public int SellerId { get; set; }
     public List<Bid> Bids { get; set; }
 
-    public Auction(int id, string name, string description, decimal startingPrice, DateTime endDateTime, string sellerId)
+    public Auction(int id, string name, string description, decimal startingPrice, DateTime endDateTime, int sellerId)
     {
         Id = id;
         Name = name;

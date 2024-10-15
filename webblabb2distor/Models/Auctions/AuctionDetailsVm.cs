@@ -28,5 +28,11 @@ public class AuctionDetailsVm
             EndDateTime = auction.EndDateTime,
             SellerName = auction.Name
         };
+        foreach (var bid in auction.Bids)
+        {
+            auctionDetailsVm.Bids.Add(BidVm.FromBid(bid));
+        }
+
+        return auctionDetailsVm;
     }
 }
