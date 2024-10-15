@@ -15,12 +15,20 @@ public class ProjectDbContext : DbContext
         // Seeding initial data
         modelBuilder.Entity<AuctionDB>().HasData(new AuctionDB
         {
-           
+         Id  = 1,
+         description = "Auction description",
+         Enddate = DateTime.Today,
+         BidsDbs = new List<BidsDb>(),
+         price = 45,
+         Sellername = "Seller",
         });
 
         modelBuilder.Entity<BidsDb>().HasData(new BidsDb
         {
-         
+         Id = 2,
+         Bidamount = 35,
+         Biddername = "byuer",
+         Bidtime = DateTime.Today
         });
     }
 }
