@@ -7,6 +7,7 @@ public class AuctionVm
 {
     [ScaffoldColumn(false)]
     public int Id { get; set; }
+    public string Description { get; set; }
     public string Name { get; set; }
     [Display(Name = "Start Time")]
     public decimal StartingPrice { get; set; }
@@ -21,6 +22,7 @@ public class AuctionVm
         {
             Id = auction.Id,
             Name = auction.Name,
+            Description = auction.Description,
             StartingPrice = auction.StartingPrice,
             EndDateTime = auction.EndDateTime
         };

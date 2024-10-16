@@ -21,7 +21,7 @@ public class AuctionService : IAuctionService
 
     public IEnumerable<Auction> GetAllActiveAuctions()
     {
-        return _auctions.Where(auction => auction.EndDateTime <= DateTime.Now);
+        return _auctions.Where(auction => auction.EndDateTime > DateTime.Now);
     }
 
     public Auction GetDetails(int auctionId)

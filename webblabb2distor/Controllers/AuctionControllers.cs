@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using webblabb2distor.Core;
 using webblabb2distor.Core.Interfaces;
+using webblabb2distor.Models.Auctions;
 
 namespace webblabb2distor.Controllers
 {
@@ -14,13 +16,25 @@ namespace webblabb2distor.Controllers
         // GET: AuctionControllers
         public ActionResult Index()
         {
-            return View();
+            var auctions = _auctionService.GetAllActiveAuctions();
+            var auctionsVms = new List<AuctionVm>();
+            foreach (var auction in auctions)
+            {
+                auctionsVms.Add(AuctionVm.FromAuction(auction));
+            }
+            return View(auctionsVms);
         }
 
         // GET: AuctionControllers/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var auction = _auctionService.GetDetails(id);
+            if (auction==null)
+            {
+                return NotFound();
+            }
+            var auctionDetailsVm = AuctionDetailsVm.FromAuction(auction);
+            return View(auctionDetailsVm);
         }
 
         // GET: AuctionControllers/Create
@@ -32,15 +46,12 @@ namespace webblabb2distor.Controllers
         // POST: AuctionControllers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(AuctionVm auctionVm)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                int sellerId = int.Parse(User.Identity.GetUserId());
+                _auctionService.CreateAuction(auctionVm.Name, auctionVm.Description, auctionVm.StartingPrice, auctionVm.EndDateTime, sellerId);
             }
         }
 
