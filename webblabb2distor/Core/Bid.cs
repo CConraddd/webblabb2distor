@@ -4,17 +4,16 @@ public class Bid
 {
     public int Id { get; set; }
     public int AuctionId { get; set; }
-    public int BidderId { get; set; }
+    public string BidderUsername { get; set; }  // Changed to string
     public decimal Amount { get; set; }
     public DateTime BidTime { get; set; }
-    public User Bidder { get; set; }
 
-    public Bid(int auctionId, int bidderId, decimal amount, DateTime bidTime, User bidder)
+    public Bid(int id, int auctionId, string bidderUsername, decimal amount, DateTime bidTime)
     {
+        Id = id;
         AuctionId = auctionId;
-        BidderId = bidderId;
+        BidderUsername = bidderUsername;
         Amount = amount;
         BidTime = bidTime;
-        Bidder = bidder;
     }
 }

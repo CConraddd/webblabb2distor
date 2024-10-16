@@ -2,7 +2,7 @@ namespace webblabb2distor.Core.Interfaces;
 
 public interface IBidService
 {
-    void PlaceBid(int auctionId, int bidderId, decimal bidAmount);
+    void PlaceBid(int auctionId, string bidderUsername, decimal bidAmount);
     IEnumerable<Bid> GetBidsForAuction(int auctionId);
-    IEnumerable<Bid> GetBidsByUserId(int userId);
+    IEnumerable<Bid> GetBidsByUsername(string username);
 }

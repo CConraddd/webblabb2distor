@@ -1,3 +1,4 @@
+using System.Data;
 using webblabb2distor.Core.Interfaces;
 
 namespace webblabb2distor.Core.Services;
@@ -5,9 +6,10 @@ namespace webblabb2distor.Core.Services;
 public class AuctionService : IAuctionService
 {
     private readonly List<Auction> _auctions = new List<Auction>();
-    public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, int sellerId)
-    { 
-        _auctions.Add(new Auction(_auctions.Count + 1, name, description, startingPrice, endDate, sellerId));
+    
+    public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string sellerUsername)
+    {
+        _auctions.Add(new Auction(_auctions.Count + 1, name, description, startingPrice, endDate, sellerUsername));
     }
 
     public void EditDescription(int auctionId, string newDescription)
@@ -26,16 +28,24 @@ public class AuctionService : IAuctionService
 
     public Auction GetDetails(int auctionId)
     {
-        return _auctions.Find(auction => auction.Id == auctionId);
+        var auction = _auctions.Find(a => a.Id == auctionId);
+
+        if (auction == null)
+        {
+            throw new DataException("Auction not found");
+        }
+
+        return auction;
     }
 
-    public IEnumerable<Auction> GetAuctionsByUserId(int userId)
+    public IEnumerable<Auction> GetAuctionsByUserName(string username)
     {
-        return _auctions.Where(a => a.SellerId == userId);
+        return _auctions.Where(a => a.SellerUsername == username);
     }
 
-    public IEnumerable<Auction> GetWonAuctions(int userId)
+    public IEnumerable<Auction> GetWonAuctions(string username)
     {
-        return _auctions.Where(a => a.Bids.Any(b => b.BidderId == userId && b.Amount == a.Bids.Max(bid => bid.Amount))&& a.EndDateTime < DateTime.Now);
+        return _auctions.Where(a => a.Bids.Any(b => b.BidderUsername == username && b.Amount == a.Bids.Max(bid => bid.Amount))
+                                    && a.EndDateTime < DateTime.Now);
     }
 }

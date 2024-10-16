@@ -26,7 +26,7 @@ public class AuctionDetailsVm
             Description = auction.Description,
             StartingPrice = auction.StartingPrice,
             EndDateTime = auction.EndDateTime,
-            SellerName = auction.Name
+            SellerName = auction.SellerUsername
         };
         foreach (var bid in auction.Bids)
         {

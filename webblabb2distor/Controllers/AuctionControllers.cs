@@ -28,13 +28,7 @@ namespace webblabb2distor.Controllers
         // GET: AuctionControllers/Details/5
         public ActionResult Details(int id)
         {
-            var auction = _auctionService.GetDetails(id);
-            if (auction==null)
-            {
-                return NotFound();
-            }
-            var auctionDetailsVm = AuctionDetailsVm.FromAuction(auction);
-            return View(auctionDetailsVm);
+            throw new NotImplementedException("Not implemented");
         }
 
         // GET: AuctionControllers/Create
@@ -48,11 +42,7 @@ namespace webblabb2distor.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(AuctionVm auctionVm)
         {
-            if (ModelState.IsValid)
-            {
-                int sellerId = int.Parse(User.Identity.GetUserId());
-                _auctionService.CreateAuction(auctionVm.Name, auctionVm.Description, auctionVm.StartingPrice, auctionVm.EndDateTime, sellerId);
-            }
+            throw new NotImplementedException("Not implemented");
         }
 
         // GET: AuctionControllers/Edit/5

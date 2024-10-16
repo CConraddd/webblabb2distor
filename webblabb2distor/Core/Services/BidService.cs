@@ -5,15 +5,13 @@ namespace webblabb2distor.Core.Services;
 public class BidService : IBidService
 {
     private readonly IAuctionService _auctionService;
-    private readonly UserService _userService;
 
-    public BidService(IAuctionService auctionService, UserService userService)
+    public BidService(IAuctionService auctionService)
     {
-       _auctionService = auctionService;
-       _userService = userService;
+        _auctionService = auctionService;
     }
 
-    public void PlaceBid(int auctionId, int bidderId, decimal bidAmount)
+    public void PlaceBid(int auctionId, string bidderUsername, decimal bidAmount)
     {
         var auction = _auctionService.GetDetails(auctionId);
         if (auction is null || auction.EndDateTime < DateTime.Now)
@@ -22,7 +20,7 @@ public class BidService : IBidService
         }
         decimal highestBid;
 
-        if (auction.SellerId == bidderId)
+        if (auction.SellerUsername == bidderUsername)
         {
             throw new InvalidOperationException("You cannot place bid on your own auction.");
         }
@@ -38,12 +36,7 @@ public class BidService : IBidService
         {
             throw new InvalidOperationException("Bid is not higher than the highest bid.");
         }
-        var bidder = _userService.GetUserById(bidderId);
-        if (bidder == null)
-        {
-            throw new InvalidOperationException("Bidder not found.");
-        }
-        auction.Bids.Add(new Bid(auction.Bids.Count+1, bidderId, bidAmount, DateTime.Now, bidder));
+        auction.Bids.Add(new Bid(auction.Bids.Count + 1, auctionId, bidderUsername, bidAmount, DateTime.Now));
     }
 
     public IEnumerable<Bid> GetBidsForAuction(int auctionId)
@@ -56,9 +49,9 @@ public class BidService : IBidService
         return auction.Bids.OrderByDescending(b => b.Amount);
     }
 
-    public IEnumerable<Bid> GetBidsByUserId(int userId)
+    public IEnumerable<Bid> GetBidsByUsername(string username)
     {
-        var auctions = _auctionService.GetAuctionsByUserId(userId);
-        return auctions.SelectMany(a => a.Bids.Where(b => b.BidderId == userId));
+        var auctions = _auctionService.GetAllActiveAuctions();
+        return auctions.SelectMany(a => a.Bids.Where(b => b.BidderUsername == username));
     }
 }
