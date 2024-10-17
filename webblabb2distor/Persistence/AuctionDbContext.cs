@@ -10,6 +10,7 @@ public class AuctionDbContext : DbContext
 
     public DbSet<BidsDb> BidsDbs { get; set; }
     public DbSet<AuctionDB> AuctionDbs { get; set; }
+    public DbSet<UserDb> UserDbs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,6 +53,21 @@ public class AuctionDbContext : DbContext
                 Bidamount = 20000,
                 Biddername = "Kalle",
                 Bidtime = DateTime.Today
+            }
+        );
+
+        modelBuilder.Entity<UserDb>().HasData(
+            new UserDb
+            {
+                id = 1,
+                Password = "123",
+                Username = "bertil",
+            },
+            new UserDb
+            {
+                id = 2,
+                Password = "123",
+                Username = "kalle",
             }
         );
     }

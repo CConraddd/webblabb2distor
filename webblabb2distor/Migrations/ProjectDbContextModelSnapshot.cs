@@ -113,6 +113,39 @@ namespace webblabb2distor.Migrations
                         });
                 });
 
+            modelBuilder.Entity("webblabb2distor.Persistence.UserDb", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id");
+
+                    b.ToTable("UserDbs");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            Password = "123",
+                            Username = "bertil"
+                        },
+                        new
+                        {
+                            id = 2,
+                            Password = "123",
+                            Username = "kalle"
+                        });
+                });
+
             modelBuilder.Entity("webblabb2distor.Persistence.BidsDb", b =>
                 {
                     b.HasOne("webblabb2distor.Persistence.AuctionDB", "Auction")
