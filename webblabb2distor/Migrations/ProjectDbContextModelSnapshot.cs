@@ -19,45 +19,73 @@ namespace webblabb2distor.Migrations
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("webblabb2distor.Persistence.ProjectDb", b =>
+            modelBuilder.Entity("webblabb2distor.Persistence.AuctionDB", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("Enddate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Sellername")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<decimal>("price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectDbs");
+                    b.ToTable("AuctionDbs");
 
                     b.HasData(
                         new
                         {
-                            Id = 4,
-                            CreatedDate = new DateTime(2024, 10, 14, 14, 53, 25, 496, DateTimeKind.Local).AddTicks(231),
-                            Title = "testlearn Aspnet"
+                            Id = 1,
+                            Enddate = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            Sellername = "Seller",
+                            description = "Auction description",
+                            name = "ragnar",
+                            price = 45m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Enddate = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            Sellername = "bertil",
+                            description = "Old ferrari",
+                            name = "bartil",
+                            price = 25000m
                         });
                 });
 
-            modelBuilder.Entity("webblabb2distor.Persistence.TaskDb", b =>
+            modelBuilder.Entity("webblabb2distor.Persistence.BidsDb", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                    b.Property<int>("AuctionId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<decimal>("Bidamount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Biddername")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Bidtime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("ProjectId")
@@ -65,34 +93,45 @@ namespace webblabb2distor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("AuctionId");
 
-                    b.ToTable("TasksDbs");
+                    b.ToTable("BidsDbs");
 
                     b.HasData(
                         new
                         {
+                            Id = 1,
+                            AuctionId = 1,
+                            Bidamount = 35m,
+                            Biddername = "byuer",
+                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            ProjectId = 0
+                        },
+                        new
+                        {
                             Id = 2,
-                            Description = "test test la la",
-                            LastUpdated = new DateTime(2024, 10, 14, 14, 53, 25, 496, DateTimeKind.Local).AddTicks(590),
-                            ProjectId = 3
+                            AuctionId = 2,
+                            Bidamount = 20000m,
+                            Biddername = "Kalle",
+                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            ProjectId = 0
                         });
                 });
 
-            modelBuilder.Entity("webblabb2distor.Persistence.TaskDb", b =>
+            modelBuilder.Entity("webblabb2distor.Persistence.BidsDb", b =>
                 {
-                    b.HasOne("webblabb2distor.Persistence.ProjectDb", "Project")
-                        .WithMany("TaskDbs")
-                        .HasForeignKey("ProjectId")
+                    b.HasOne("webblabb2distor.Persistence.AuctionDB", "Auction")
+                        .WithMany("BidsDbs")
+                        .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Project");
+                    b.Navigation("Auction");
                 });
 
-            modelBuilder.Entity("webblabb2distor.Persistence.ProjectDb", b =>
+            modelBuilder.Entity("webblabb2distor.Persistence.AuctionDB", b =>
                 {
-                    b.Navigation("TaskDbs");
+                    b.Navigation("BidsDbs");
                 });
 #pragma warning restore 612, 618
         }
