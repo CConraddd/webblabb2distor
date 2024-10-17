@@ -20,6 +20,6 @@ public class AuctionDB
     public DateTime Enddate { get; set; }
     [Required]
     public string Sellername { get; set; }
-    
+    [Required]
     public List<BidsDb> BidsDbs { get; set; } = new List<BidsDb>();
 }

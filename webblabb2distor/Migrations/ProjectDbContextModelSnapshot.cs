@@ -88,9 +88,6 @@ namespace webblabb2distor.Migrations
                     b.Property<DateTime>("Bidtime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuctionId");
@@ -104,8 +101,7 @@ namespace webblabb2distor.Migrations
                             AuctionId = 1,
                             Bidamount = 35m,
                             Biddername = "byuer",
-                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
-                            ProjectId = 0
+                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
@@ -113,8 +109,7 @@ namespace webblabb2distor.Migrations
                             AuctionId = 2,
                             Bidamount = 20000m,
                             Biddername = "Kalle",
-                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
-                            ProjectId = 0
+                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local)
                         });
                 });
 

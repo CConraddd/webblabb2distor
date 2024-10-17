@@ -25,6 +25,6 @@ public class BidsDb
 
     [ForeignKey("AuctionId")]
     public int AuctionId { get; set; }
-    
+    [Required]
     public AuctionDB Auction { get; set; }
 }
