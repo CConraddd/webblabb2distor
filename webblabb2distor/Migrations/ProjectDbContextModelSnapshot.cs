@@ -9,7 +9,7 @@ using webblabb2distor.Persistence;
 
 namespace webblabb2distor.Migrations
 {
-    [DbContext(typeof(ProjectDbContext))]
+    [DbContext(typeof(AuctionDbContext))]
     partial class ProjectDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

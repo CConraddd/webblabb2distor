@@ -17,7 +17,7 @@ builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddDbContext<webblabb2distorContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("IdentityDbConnection")));
 
-builder.Services.AddDbContext<ProjectDbContext>(options =>
+builder.Services.AddDbContext<AuctionDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("ProjectDbConnection")));
 builder.Services.AddDbContext<UserDbcontext>(options =>    
     options.UseMySQL(builder.Configuration.GetConnectionString("IdentityDbConnection")));

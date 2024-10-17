@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace webblabb2distor.Persistence;
 
-public class ProjectDbContext : DbContext
+public class AuctionDbContext : DbContext
 {
-    public ProjectDbContext(DbContextOptions<ProjectDbContext> options) : base(options) { }
+    public AuctionDbContext(DbContextOptions<AuctionDbContext> options) : base(options) { }
 
     public DbSet<BidsDb> BidsDbs { get; set; }
     public DbSet<AuctionDB> AuctionDbs { get; set; }
