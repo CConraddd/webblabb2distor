@@ -11,8 +11,8 @@ public class BidsDb
 {
     [Key]
     public int Id { get; set; } // Use 'Id' for consistency
-    [Required]
-    public int AuctionId { get; set; }
+   // [Required]
+    //public int AuctionId { get; set; }
     [Required]
     public decimal Bidamount { get; set; }
     [Required]
@@ -23,7 +23,8 @@ public class BidsDb
     [DataType(DataType.DateTime)]
     public DateTime Bidtime { get; set; }
 
-    [ForeignKey("Project")]
-    public int ProjectId { get; set; }
+    [ForeignKey("AuctionId")]
+    public int AuctionId { get; set; }
+    
     public AuctionDB Auction { get; set; }
 }
