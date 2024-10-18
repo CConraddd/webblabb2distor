@@ -7,28 +7,49 @@ namespace webblabb2distor.Controllers
 {
     public class AuctionControllers : Controller
     {
-        private IAuctionService _auctionService;
+        private readonly IAuctionService _auctionService;
+        private readonly IBidService _bidService;
+        private readonly string _testUserName = "testuser"; //hårdkodad user
 
-        public AuctionControllers(IAuctionService auctionService)
+        public AuctionControllers(IAuctionService auctionService, IBidService bidService)
         {
             _auctionService = auctionService;
+            _bidService = bidService;
         }
         // GET: AuctionControllers
         public ActionResult Index()
         {
             var auctions = _auctionService.GetAllActiveAuctions();
-            var auctionsVms = new List<AuctionVm>();
-            foreach (var auction in auctions)
+            if (auctions == null)
             {
-                auctionsVms.Add(AuctionVm.FromAuction(auction));
+                auctions = new List<Auction>();
             }
+
+            var auctionsVms = auctions.Select(AuctionVm.FromAuction).ToList();
             return View(auctionsVms);
         }
+
 
         // GET: AuctionControllers/Details/5
         public ActionResult Details(int id)
         {
-            throw new NotImplementedException("Not implemented");
+            try
+            {
+                var auction = _auctionService.GetDetails(id);
+                if (auction == null)
+                {
+                    return NotFound("Auction not found.");
+                }
+
+                var auctionDetailsVm = AuctionDetailsVm.FromAuction(auction);
+                auctionDetailsVm.Bids = auction.Bids.OrderByDescending(b => b.Amount)
+                    .Select(BidVm.FromBid).ToList();
+                return View(auctionDetailsVm);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: AuctionControllers/Create
@@ -37,28 +58,53 @@ namespace webblabb2distor.Controllers
             return View();
         }
 
-        // POST: AuctionControllers/Create
+        // POST: AuctionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(AuctionVm auctionVm)
         {
-            throw new NotImplementedException("Not implemented");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var username = User.Identity?.Name ?? _testUserName;  // Använd hårdkodad användare om ingen är inloggad
+                    _auctionService.CreateAuction(auctionVm.Name, auctionVm.Description, auctionVm.StartingPrice, auctionVm.EndDateTime, username);
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(auctionVm);
+            }
+            catch
+            {
+                return View();
+            }
         }
-
-        // GET: AuctionControllers/Edit/5
+        
+        
+        // GET: AuctionController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var auction = _auctionService.GetDetails(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+            var auctionVm = AuctionVm.FromAuction(auction);
+            return View(auctionVm);
         }
 
-        // POST: AuctionControllers/Edit/5
+        // POST: AuctionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, AuctionVm auctionVm)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _auctionService.EditDescription(id, auctionVm.Description);
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(auctionVm);
             }
             catch
             {
@@ -66,25 +112,51 @@ namespace webblabb2distor.Controllers
             }
         }
 
-        // GET: AuctionControllers/Delete/5
+        // GET: AuctionController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var auction = _auctionService.GetDetails(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+            var auctionVm = AuctionVm.FromAuction(auction);
+            return View(auctionVm);
         }
 
-        // POST: AuctionControllers/Delete/5
+        // POST: AuctionController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
+                _auctionService.DeleteAuction(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
             }
+        }
+
+        // GET: AuctionController/MyBids
+        public ActionResult MyBids()
+        {
+            var auctions = _bidService.GetBidsByUsername(User.Identity.Name)
+                .Where(b => b.Auction.EndDateTime > DateTime.Now)
+                .Select(b => b.Auction)
+                .Distinct();
+            var auctionVms = auctions.Select(a => AuctionVm.FromAuction(a)).ToList();
+            return View(auctionVms);
+        }
+
+        // GET: AuctionController/MyWonAuctions
+        public ActionResult MyWonAuctions()
+        {
+            var wonAuctions = _auctionService.GetWonAuctions(User.Identity.Name);
+            var auctionVms = wonAuctions.Select(a => AuctionVm.FromAuction(a)).ToList();
+            return View(auctionVms);
         }
     }
 }

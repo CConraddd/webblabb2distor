@@ -7,7 +7,7 @@ public interface IAuctionPersistance
 
     void AddAuction(Auction auction);
     
-    Auction GetAuctionById(int auctionId, String username);
+    Auction GetAuctionById(int auctionId, string username);
     
     IEnumerable<Auction> GetActiveAuctions();
     

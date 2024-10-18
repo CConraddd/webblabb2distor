@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Titlepeepee"] = "Home Page Gaming";
+﻿@model IEnumerable<webblabb2distor.Models.Auctions.AuctionVm>
+
+@{
+ViewData["Title"] = "Active Auctions";
 }
 
 <!-- Navbar with Login/Register -->
@@ -23,9 +25,51 @@
 </nav>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <h2 class="display-4">goodbye</h2>
-
-    
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Active Auctions</h1>
 </div>
+
+<!-- Display message if there are no auctions -->
+@if (Model == null || !Model.Any())
+{
+<p class="text-center">No active auctions available at the moment.</p>
+}
+else
+{
+<!-- Table for listing all active auctions -->
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Starting Price</th>
+        <th>End Date</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var auction in Model)
+    {
+    <tr>
+        <td>@auction.Name</td>
+        <td>@auction.Description</td>
+        <td>@auction.StartingPrice</td>
+        <td>@auction.EndDateTime.ToString("yyyy-MM-dd")</td>
+        <td>
+            <a asp-action="Details" asp-route-id="@auction.Id" class="btn btn-info">Details</a>
+            @if (User.Identity.IsAuthenticated && auction.SellerUsername == User.Identity.Name)
+            {
+            <a asp-action="Edit" asp-route-id="@auction.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Delete" asp-route-id="@auction.Id" class="btn btn-danger">Delete</a>
+            }
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+}
+
+<!-- Link to create a new auction -->
+@if (User.Identity.IsAuthenticated)
+{
+<a asp-action="Create" class="btn btn-success">Create New Auction</a>
+}

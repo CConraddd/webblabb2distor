@@ -60,8 +60,8 @@ public class AuctionDbContext : DbContext
             new UserDb
             {
                 id = 1,
-                Password = "123",
-                Username = "bertil",
+                Password = "Orvar123!",
+                Username = "Bertil@kth.se",
             },
             new UserDb
             {

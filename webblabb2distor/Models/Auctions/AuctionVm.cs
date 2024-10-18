@@ -15,6 +15,8 @@ public class AuctionVm
     [Display(Name = "End Date")]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
     public DateTime EndDateTime { get; set; }
+    
+    public string SellerUsername { get; set; } 
 
     public static AuctionVm FromAuction(Auction auction)
     {
@@ -24,7 +26,8 @@ public class AuctionVm
             Name = auction.Name,
             Description = auction.Description,
             StartingPrice = auction.StartingPrice,
-            EndDateTime = auction.EndDateTime
+            EndDateTime = auction.EndDateTime,
+            SellerUsername = auction.SellerUsername
         };
     }
 }

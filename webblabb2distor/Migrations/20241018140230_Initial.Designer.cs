@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webblabb2distor.Persistence;
 
@@ -10,9 +11,11 @@ using webblabb2distor.Persistence;
 namespace webblabb2distor.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241018140230_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace webblabb2distor.Migrations
                         new
                         {
                             Id = 1,
-                            Enddate = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            Enddate = new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local),
                             Sellername = "Seller",
                             description = "Auction description",
                             name = "ragnar",
@@ -61,7 +64,7 @@ namespace webblabb2distor.Migrations
                         new
                         {
                             Id = 2,
-                            Enddate = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            Enddate = new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local),
                             Sellername = "bertil",
                             description = "Old ferrari",
                             name = "bartil",
@@ -101,7 +104,7 @@ namespace webblabb2distor.Migrations
                             AuctionId = 1,
                             Bidamount = 35m,
                             Biddername = "byuer",
-                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local)
+                            Bidtime = new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
@@ -109,7 +112,7 @@ namespace webblabb2distor.Migrations
                             AuctionId = 2,
                             Bidamount = 20000m,
                             Biddername = "Kalle",
-                            Bidtime = new DateTime(2024, 10, 17, 0, 0, 0, 0, DateTimeKind.Local)
+                            Bidtime = new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local)
                         });
                 });
 
@@ -135,8 +138,8 @@ namespace webblabb2distor.Migrations
                         new
                         {
                             id = 1,
-                            Password = "123",
-                            Username = "bertil"
+                            Password = "Orvar123!",
+                            Username = "Bertil@kth.se"
                         },
                         new
                         {

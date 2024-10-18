@@ -48,4 +48,15 @@ public class AuctionService : IAuctionService
         return _auctions.Where(a => a.Bids.Any(b => b.BidderUsername == username && b.Amount == a.Bids.Max(bid => bid.Amount))
                                     && a.EndDateTime < DateTime.Now);
     }
+    
+    public void DeleteAuction(int auctionId)
+    {
+        var auction = _auctions.Find(a => a.Id == auctionId);
+        if (auction == null)
+        {
+            throw new DataException("Auction not found.");
+        }
+
+        _auctions.Remove(auction);
+    }
 }

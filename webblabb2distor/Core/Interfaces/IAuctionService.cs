@@ -8,4 +8,5 @@ public interface IAuctionService
     Auction GetDetails(int auctionId);
     IEnumerable<Auction> GetAuctionsByUserName(string username);
     IEnumerable<Auction> GetWonAuctions(string username);
+    void DeleteAuction(int auctionId);
 }
