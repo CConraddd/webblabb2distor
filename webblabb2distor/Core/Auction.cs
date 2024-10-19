@@ -10,6 +10,8 @@ public class Auction
     public string SellerUsername { get; set; }  // Changed to string
     public List<Bid> Bids { get; set; }
 
+    public Auction() {}
+
     public Auction(int id, string name, string description, decimal startingPrice, DateTime endDateTime, string sellerUsername)
     {
         Id = id;
