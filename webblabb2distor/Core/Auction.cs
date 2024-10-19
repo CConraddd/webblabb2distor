@@ -9,9 +9,10 @@ public class Auction
     public DateTime EndDateTime { get; set; }
     public string SellerUsername { get; set; }  // Changed to string
     public List<Bid> Bids { get; set; }
-
-    public Auction() {}
-
+    public Auction()
+    {
+        Bids = new List<Bid>();
+    }
     public Auction(int id, string name, string description, decimal startingPrice, DateTime endDateTime, string sellerUsername)
     {
         Id = id;
