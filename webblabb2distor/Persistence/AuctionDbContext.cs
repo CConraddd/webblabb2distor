@@ -10,7 +10,7 @@ public class AuctionDbContext : DbContext
 
     public DbSet<BidsDb> BidsDbs { get; set; }
     public DbSet<AuctionDB> AuctionDbs { get; set; }
-    public DbSet<UserDb> UserDbs { get; set; }
+    //public DbSet<UserDb> UserDbs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,20 +55,21 @@ public class AuctionDbContext : DbContext
                 Bidtime = DateTime.Today
             }
         );
-
+/*
         modelBuilder.Entity<UserDb>().HasData(
             new UserDb
             {
                 id = 1,
                 Password = "Orvar123!",
-                Username = "Bertil@kth.se",
+                    Username = "Bertil@kth.se",
             },
             new UserDb
             {
                 id = 2,
-                Password = "123",
-                Username = "kalle",
+                Password = "123Gaming",
+                Username = "Kalle@kth.se",
             }
         );
+        */
     }
 }
