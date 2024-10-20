@@ -9,7 +9,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace webblabb2distor.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Auction : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,21 +32,6 @@ namespace webblabb2distor.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AuctionDbs", x => x.Id);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "UserDbs",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Username = table.Column<string>(type: "longtext", nullable: false),
-                    Password = table.Column<string>(type: "longtext", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserDbs", x => x.id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -78,17 +63,8 @@ namespace webblabb2distor.Migrations
                 columns: new[] { "Id", "Enddate", "Sellername", "description", "name", "price" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local), "Seller", "Auction description", "ragnar", 45m },
-                    { 2, new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local), "bertil", "Old ferrari", "bartil", 25000m }
-                });
-
-            migrationBuilder.InsertData(
-                table: "UserDbs",
-                columns: new[] { "id", "Password", "Username" },
-                values: new object[,]
-                {
-                    { 1, "Orvar123!", "Bertil@kth.se" },
-                    { 2, "123", "kalle" }
+                    { 1, new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local), "Seller", "Auction description", "ragnar", 45m },
+                    { 2, new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local), "bertil", "Old ferrari", "bartil", 25000m }
                 });
 
             migrationBuilder.InsertData(
@@ -96,8 +72,8 @@ namespace webblabb2distor.Migrations
                 columns: new[] { "Id", "AuctionId", "Bidamount", "Biddername", "Bidtime" },
                 values: new object[,]
                 {
-                    { 1, 1, 35m, "byuer", new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local) },
-                    { 2, 2, 20000m, "Kalle", new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Local) }
+                    { 1, 1, 35m, "byuer", new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local) },
+                    { 2, 2, 20000m, "Kalle", new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -111,9 +87,6 @@ namespace webblabb2distor.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BidsDbs");
-
-            migrationBuilder.DropTable(
-                name: "UserDbs");
 
             migrationBuilder.DropTable(
                 name: "AuctionDbs");
