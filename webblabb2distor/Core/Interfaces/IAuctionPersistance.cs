@@ -1,17 +1,14 @@
-﻿namespace webblabb2distor.Core.Interfaces;
+﻿using webblabb2distor.Persistence;
+using System.Collections.Generic;
+using System;
 
-public interface IAuctionPersistance
+namespace webblabb2distor.Core.Interfaces;
+
+public interface IAuctionPersistence
 {
-    
     void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string userName);
-
-    void AddAuction(Auction auction);
-    
-    Auction GetAuctionById(int auctionId, string username);
-    
-    IEnumerable<Auction> GetActiveAuctions();
-    
-    void UpdateAuction(Auction auction);
-    
+    AuctionDB GetAuctionById(int auctionId, string username);
+    List<Auction> GetActiveAuctions();
+    void UpdateAuction(AuctionDB auction);
     void DeleteAuction(int auctionId);
 }
