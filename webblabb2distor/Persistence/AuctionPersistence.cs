@@ -2,68 +2,61 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using webblabb2distor.Persistence;
+using Microsoft.EntityFrameworkCore;
 using webblabb2distor.Core;
 
 namespace webblabb2distor.Persistence;
 
-public class AuctionPersistence : IAuctionPersistance
+public class AuctionPersistence : IAuctionPersistence
 {
-     
     
-    // In-memory storage for auctions
-    private readonly List<Auction> _auctions = new();
-    private int _nextId = 1; // Simple ID generator
+    private readonly AuctionDbContext _dbContext;
+
+    public AuctionPersistence(AuctionDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
 
     public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string userName)
     {
-        var auction = new Auction
+        var auction = new AuctionDB
         {
-            Id = _nextId++,
-            Name = name,
-            Description = description,
-            StartingPrice = startingPrice,
-            EndDateTime = endDate,
-            SellerUsername = userName
+            name = name,
+            description = description,
+            price = startingPrice,
+            Enddate = endDate,
+            Sellername = userName
         };
-
-        _auctions.Add(auction);
+        _dbContext.AuctionDbs.Add(auction);
+        _dbContext.SaveChanges();
     }
     
-    public void AddAuction(Auction auction)
+    public AuctionDB GetAuctionById(int auctionId, string username)
     {
-        auction.Id = _nextId++;
-        _auctions.Add(auction);
+        return _dbContext.AuctionDbs.Include(a => a.BidsDbs).FirstOrDefault(a => a.Id == auctionId && a.Sellername == username);
     }
 
-    public Auction GetAuctionById(int auctionId, string username)
+    public List<Auction> GetActiveAuctions()
     {
-        return _auctions.FirstOrDefault(a => a.Id == auctionId && a.SellerUsername == username);
+        return _dbContext.AuctionDbs
+            .Where(a => a.Enddate > DateTime.Now)
+            .ToList();
     }
 
-    public IEnumerable<Auction> GetActiveAuctions()
+    public void UpdateAuction(AuctionDB auction)
     {
-        return _auctions.Where(a => a.EndDateTime > DateTime.Now).ToList();
-    }
-
-    public void UpdateAuction(Auction auction)
-    {
-        var existingAuction = _auctions.FirstOrDefault(a => a.Id == auction.Id);
-        if (existingAuction != null)
-        {
-            existingAuction.Name = auction.Name;
-            existingAuction.Description = auction.Description;
-            existingAuction.StartingPrice = auction.StartingPrice;
-            existingAuction.EndDateTime = auction.EndDateTime;
-            existingAuction.SellerUsername = auction.SellerUsername;
-        }
+        _dbContext.AuctionDbs.Update(auction);
+        _dbContext.SaveChanges();
     }
 
     public void DeleteAuction(int auctionId)
     {
-        var auction = _auctions.FirstOrDefault(a => a.Id == auctionId);
+        var auction = _dbContext.AuctionDbs.FirstOrDefault(a => a.Id == auctionId);
         if (auction != null)
         {
-            _auctions.Remove(auction);
+            _dbContext.AuctionDbs.Remove(auction);
+            _dbContext.SaveChanges();
         }
     }
 }
