@@ -23,12 +23,12 @@ namespace webblabb2distor.Core.Services
             var auction = _auctionPersistence.GetAuctionById(auctionId, username: null);
             if (auction != null)
             {
-                auction.description = newDescription;
+                auction.Description = newDescription;
                 _auctionPersistence.UpdateAuction(auction);
             }
         }
 
-        public IEnumerable<Auction> GetAllActiveAuctions()
+        public List<Auction> GetAllActiveAuctions()
         {
             return _auctionPersistence.GetActiveAuctions();
         }

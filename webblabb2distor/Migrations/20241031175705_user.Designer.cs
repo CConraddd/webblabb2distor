@@ -10,8 +10,8 @@ using webblabb2distor.Persistence;
 namespace webblabb2distor.Migrations
 {
     [DbContext(typeof(UserDbcontext))]
-    [Migration("20241020132430_Initial")]
-    partial class Initial
+    [Migration("20241031175705_user")]
+    partial class user
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
