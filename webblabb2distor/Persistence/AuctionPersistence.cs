@@ -6,7 +6,6 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using webblabb2distor.Core;
 using webblabb2distor.Core.Interfaces;
-using webblabb2distor.Persistence;
 
 namespace webblabb2distor.Persistence
 {
@@ -40,31 +39,47 @@ namespace webblabb2distor.Persistence
             if (auctionDb == null) throw new DataException("Auction not found");
 
             var auction = _mapper.Map<Auction>(auctionDb);
-            auction.Bids = auctionDb.BidsDbs.Select(b => _mapper.Map<Bid>(b)).ToList();
+            auction.Bids = auctionDb.BidsDbs.Select(b => _mapper.Map<Bid>(b)).ToList(); // Mapping av Bids separat
 
             return auction;
         }
 
         public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string userName)
         {
-            var auctionDb = new AuctionDB
+            try
             {
-                name = name,
-                description = description,
-                price = startingPrice,
-                Enddate = endDate,
-                Sellername = userName
-            };
+                var auctionDb = new AuctionDB
+                {
+                    name = name,
+                    description = description,
+                    price = startingPrice,
+                    Enddate = endDate,
+                    Sellername = userName
+                };
 
-            _dbContext.AuctionDbs.Add(auctionDb);
-            _dbContext.SaveChanges();
+                _dbContext.AuctionDbs.Add(auctionDb);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Error while creating auction: " + ex.Message);
+                throw new DataException("Could not save the auction to the database.", ex);
+            }
         }
 
         public void UpdateAuction(Auction auction)
         {
-            var auctionDb = _mapper.Map<AuctionDB>(auction);
-            _dbContext.AuctionDbs.Update(auctionDb);
-            _dbContext.SaveChanges();
+            try
+            {
+                var auctionDb = _mapper.Map<AuctionDB>(auction);
+                _dbContext.AuctionDbs.Update(auctionDb);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Error while updating auction: " + ex.Message);
+                throw new DataException("Could not update the auction in the database.", ex);
+            }
         }
 
         public void DeleteAuction(int auctionId)
@@ -72,8 +87,16 @@ namespace webblabb2distor.Persistence
             var auctionDb = _dbContext.AuctionDbs.FirstOrDefault(a => a.Id == auctionId);
             if (auctionDb != null)
             {
-                _dbContext.AuctionDbs.Remove(auctionDb);
-                _dbContext.SaveChanges();
+                try
+                {
+                    _dbContext.AuctionDbs.Remove(auctionDb);
+                    _dbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine("Error while deleting auction: " + ex.Message);
+                    throw new DataException("Could not delete the auction from the database.", ex);
+                }
             }
         }
     }

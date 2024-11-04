@@ -71,5 +71,5 @@ else
 <!-- Link to create a new auction -->
 @if (User.Identity.IsAuthenticated)
 {
-<a asp-action="Create" class="btn btn-success">Create New Auction</a>
+<a asp-controller="Auction" asp-action="Create" class="btn btn-success">Create New Auction</a>
 }

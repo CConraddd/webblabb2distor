@@ -63,8 +63,8 @@ namespace webblabb2distor.Migrations
                 columns: new[] { "Id", "Enddate", "Sellername", "description", "name", "price" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 31, 0, 0, 0, 0, DateTimeKind.Local), "Seller", "Auction description", "ragnar", 45m },
-                    { 2, new DateTime(2024, 10, 31, 0, 0, 0, 0, DateTimeKind.Local), "bertil", "Old ferrari", "bartil", 25000m }
+                    { 1, new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local), "Seller", "Auction description", "ragnar", 45m },
+                    { 2, new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local), "bertil", "Old ferrari", "bartil", 25000m }
                 });
 
             migrationBuilder.InsertData(
@@ -72,8 +72,8 @@ namespace webblabb2distor.Migrations
                 columns: new[] { "Id", "AuctionId", "Bidamount", "Biddername", "Bidtime" },
                 values: new object[,]
                 {
-                    { 1, 1, 35m, "byuer", new DateTime(2024, 10, 31, 0, 0, 0, 0, DateTimeKind.Local) },
-                    { 2, 2, 20000m, "Kalle", new DateTime(2024, 10, 31, 0, 0, 0, 0, DateTimeKind.Local) }
+                    { 1, 1, 35m, "byuer", new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local) },
+                    { 2, 2, 20000m, "Kalle", new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local) }
                 });
 
             migrationBuilder.CreateIndex(
