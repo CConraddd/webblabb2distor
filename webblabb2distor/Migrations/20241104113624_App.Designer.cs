@@ -11,8 +11,8 @@ using webblabb2distor.Areas.Identity.Data;
 namespace webblabb2distor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241020132632_application")]
-    partial class application
+    [Migration("20241104113624_App")]
+    partial class App
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

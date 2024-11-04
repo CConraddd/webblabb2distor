@@ -13,6 +13,9 @@ builder.Services.AddControllersWithViews();
 // Register Auction services
 builder.Services.AddScoped<IAuctionService, AuctionService>();
 builder.Services.AddScoped<IBidService, BidService>();
+builder.Services.AddScoped<IAuctionPersistence, AuctionPersistence>();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Register ApplicationDbContext for Identity (Users)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

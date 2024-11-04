@@ -7,8 +7,8 @@ namespace webblabb2distor.Core.Interfaces;
 public interface IAuctionPersistence
 {
     void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string userName);
-    AuctionDB GetAuctionById(int auctionId, string username);
+    Auction GetAuctionById(int auctionId, string username);
     List<Auction> GetActiveAuctions();
-    void UpdateAuction(AuctionDB auction);
+    void UpdateAuction(Auction auction);
     void DeleteAuction(int auctionId);
 }

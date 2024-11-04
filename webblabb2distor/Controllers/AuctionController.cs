@@ -5,13 +5,13 @@ using webblabb2distor.Models.Auctions;
 
 namespace webblabb2distor.Controllers
 {
-    public class AuctionControllers : Controller
+    public class AuctionController : Controller
     {
         private readonly IAuctionService _auctionService;
         private readonly IBidService _bidService;
         private readonly string _testUserName = "testuser"; //hårdkodad user
 
-        public AuctionControllers(IAuctionService auctionService, IBidService bidService)
+        public AuctionController(IAuctionService auctionService, IBidService bidService)
         {
             _auctionService = auctionService;
             _bidService = bidService;
@@ -20,11 +20,6 @@ namespace webblabb2distor.Controllers
         public ActionResult Index()
         {
             var auctions = _auctionService.GetAllActiveAuctions();
-            if (auctions == null)
-            {
-                auctions = new List<Auction>();
-            }
-
             var auctionsVms = auctions.Select(AuctionVm.FromAuction).ToList();
             return View(auctionsVms);
         }
@@ -42,8 +37,7 @@ namespace webblabb2distor.Controllers
                 }
 
                 var auctionDetailsVm = AuctionDetailsVm.FromAuction(auction);
-                auctionDetailsVm.Bids = auction.Bids.OrderByDescending(b => b.Amount)
-                    .Select(BidVm.FromBid).ToList();
+                auctionDetailsVm.Bids = auction.Bids.OrderByDescending(b => b.Amount).Select(BidVm.FromBid).ToList();
                 return View(auctionDetailsVm);
             }
             catch (Exception ex)
@@ -63,23 +57,42 @@ namespace webblabb2distor.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(AuctionVm auctionVm)
         {
-            try
+            // Ta bort SellerUsername från ModelState för att undvika validering
+            ModelState.Remove(nameof(auctionVm.SellerUsername));
+
+            // Tilldela SellerUsername baserat på den inloggade användaren
+            auctionVm.SellerUsername = User?.Identity?.IsAuthenticated == true ? User.Identity.Name : _testUserName;
+
+            if (!ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                Console.WriteLine("ModelState is invalid.");
+                foreach (var modelState in ModelState.Values)
                 {
-                    var username = User.Identity?.Name ?? _testUserName;  // Använd hårdkodad användare om ingen är inloggad
-                    _auctionService.CreateAuction(auctionVm.Name, auctionVm.Description, auctionVm.StartingPrice, auctionVm.EndDateTime, username);
-                    return RedirectToAction(nameof(Index));
+                    foreach (var error in modelState.Errors)
+                    {
+                        Console.WriteLine("Validation Error: " + error.ErrorMessage);
+                    }
                 }
                 return View(auctionVm);
             }
-            catch
+            try
             {
+                // Om ModelState är giltigt, skapa auktionen
+                _auctionService.CreateAuction(
+                    auctionVm.Name, 
+                    auctionVm.Description, 
+                    auctionVm.StartingPrice, 
+                    auctionVm.EndDateTime, 
+                    auctionVm.SellerUsername);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
                 return View();
             }
         }
-        
-        
         // GET: AuctionController/Edit/5
         public ActionResult Edit(int id)
         {
@@ -147,7 +160,7 @@ namespace webblabb2distor.Controllers
                 .Where(b => b.Auction.EndDateTime > DateTime.Now)
                 .Select(b => b.Auction)
                 .Distinct();
-            var auctionVms = auctions.Select(a => AuctionVm.FromAuction(a)).ToList();
+            var auctionVms = auctions.Select(AuctionVm.FromAuction).ToList();
             return View(auctionVms);
         }
 
@@ -155,7 +168,7 @@ namespace webblabb2distor.Controllers
         public ActionResult MyWonAuctions()
         {
             var wonAuctions = _auctionService.GetWonAuctions(User.Identity.Name);
-            var auctionVms = wonAuctions.Select(a => AuctionVm.FromAuction(a)).ToList();
+            var auctionVms = wonAuctions.Select(AuctionVm.FromAuction).ToList();
             return View(auctionVms);
         }
     }

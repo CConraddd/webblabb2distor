@@ -11,8 +11,8 @@ using webblabb2distor.Persistence;
 namespace webblabb2distor.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20241020132449_Auction")]
-    partial class Auction
+    [Migration("20241104113537_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,7 @@ namespace webblabb2distor.Migrations
                         new
                         {
                             Id = 1,
-                            Enddate = new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            Enddate = new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Sellername = "Seller",
                             description = "Auction description",
                             name = "ragnar",
@@ -64,7 +64,7 @@ namespace webblabb2distor.Migrations
                         new
                         {
                             Id = 2,
-                            Enddate = new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            Enddate = new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             Sellername = "bertil",
                             description = "Old ferrari",
                             name = "bartil",
@@ -104,7 +104,7 @@ namespace webblabb2distor.Migrations
                             AuctionId = 1,
                             Bidamount = 35m,
                             Biddername = "byuer",
-                            Bidtime = new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local)
+                            Bidtime = new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
@@ -112,7 +112,7 @@ namespace webblabb2distor.Migrations
                             AuctionId = 2,
                             Bidamount = 20000m,
                             Biddername = "Kalle",
-                            Bidtime = new DateTime(2024, 10, 20, 0, 0, 0, 0, DateTimeKind.Local)
+                            Bidtime = new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Local)
                         });
                 });
 

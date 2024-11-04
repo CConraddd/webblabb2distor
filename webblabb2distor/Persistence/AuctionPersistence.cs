@@ -1,62 +1,103 @@
-﻿using webblabb2distor.Core.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using webblabb2distor.Persistence;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using webblabb2distor.Core;
+using webblabb2distor.Core.Interfaces;
 
-namespace webblabb2distor.Persistence;
-
-public class AuctionPersistence : IAuctionPersistence
+namespace webblabb2distor.Persistence
 {
-    
-    private readonly AuctionDbContext _dbContext;
-
-    public AuctionPersistence(AuctionDbContext dbContext)
+    public class AuctionPersistence : IAuctionPersistence
     {
-        _dbContext = dbContext;
-    }
+        private readonly AuctionDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-    public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string userName)
-    {
-        var auction = new AuctionDB
+        public AuctionPersistence(AuctionDbContext dbContext, IMapper mapper)
         {
-            name = name,
-            description = description,
-            price = startingPrice,
-            Enddate = endDate,
-            Sellername = userName
-        };
-        _dbContext.AuctionDbs.Add(auction);
-        _dbContext.SaveChanges();
-    }
-    
-    public AuctionDB GetAuctionById(int auctionId, string username)
-    {
-        return _dbContext.AuctionDbs.Include(a => a.BidsDbs).FirstOrDefault(a => a.Id == auctionId && a.Sellername == username);
-    }
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
 
-    public List<Auction> GetActiveAuctions()
-    {
-        return _dbContext.AuctionDbs
-            .Where(a => a.Enddate > DateTime.Now)
-            .ToList();
-    }
-
-    public void UpdateAuction(AuctionDB auction)
-    {
-        _dbContext.AuctionDbs.Update(auction);
-        _dbContext.SaveChanges();
-    }
-
-    public void DeleteAuction(int auctionId)
-    {
-        var auction = _dbContext.AuctionDbs.FirstOrDefault(a => a.Id == auctionId);
-        if (auction != null)
+        public List<Auction> GetActiveAuctions()
         {
-            _dbContext.AuctionDbs.Remove(auction);
-            _dbContext.SaveChanges();
+            var auctionDbs = _dbContext.AuctionDbs
+                .Where(a => a.Enddate > DateTime.Now)
+                .ToList();
+
+            return auctionDbs.Select(a => _mapper.Map<Auction>(a)).ToList();
+        }
+
+        public Auction GetAuctionById(int auctionId, string username)
+        {
+            var auctionDb = _dbContext.AuctionDbs
+                .Where(a => a.Id == auctionId && a.Sellername == username)
+                .Include(a => a.BidsDbs)
+                .FirstOrDefault();
+
+            if (auctionDb == null) throw new DataException("Auction not found");
+
+            var auction = _mapper.Map<Auction>(auctionDb);
+            auction.Bids = auctionDb.BidsDbs.Select(b => _mapper.Map<Bid>(b)).ToList(); // Mapping av Bids separat
+
+            return auction;
+        }
+
+        public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string userName)
+        {
+            try
+            {
+                var auctionDb = new AuctionDB
+                {
+                    name = name,
+                    description = description,
+                    price = startingPrice,
+                    Enddate = endDate,
+                    Sellername = userName
+                };
+
+                _dbContext.AuctionDbs.Add(auctionDb);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Error while creating auction: " + ex.Message);
+                throw new DataException("Could not save the auction to the database.", ex);
+            }
+        }
+
+        public void UpdateAuction(Auction auction)
+        {
+            try
+            {
+                var auctionDb = _mapper.Map<AuctionDB>(auction);
+                _dbContext.AuctionDbs.Update(auctionDb);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Error while updating auction: " + ex.Message);
+                throw new DataException("Could not update the auction in the database.", ex);
+            }
+        }
+
+        public void DeleteAuction(int auctionId)
+        {
+            var auctionDb = _dbContext.AuctionDbs.FirstOrDefault(a => a.Id == auctionId);
+            if (auctionDb != null)
+            {
+                try
+                {
+                    _dbContext.AuctionDbs.Remove(auctionDb);
+                    _dbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine("Error while deleting auction: " + ex.Message);
+                    throw new DataException("Could not delete the auction from the database.", ex);
+                }
+            }
         }
     }
 }
