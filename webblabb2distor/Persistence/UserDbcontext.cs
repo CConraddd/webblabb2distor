@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 public class UserDbcontext : DbContext
 {
 
+    
+    //creates the userdatabase from the userVM.
     public UserDbcontext(DbContextOptions<UserDbcontext> options) : base(options){}
    
     public DbSet<UserDb> UserDbs { get; set; }
