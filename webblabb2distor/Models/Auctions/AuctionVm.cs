@@ -9,11 +9,13 @@ public class AuctionVm
     [ScaffoldColumn(false)]
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "Description is required")]
-    public string Description { get; set; }
-
     [Required(ErrorMessage = "Name is required")]
+    [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
     public string Name { get; set; }
+
+    [Required(ErrorMessage = "Description is required")]
+    [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
+    public string Description { get; set; }
 
     [Required(ErrorMessage = "Starting Price is required")]
     [Range(0.01, double.MaxValue, ErrorMessage = "Starting Price must be a positive number")]
@@ -25,6 +27,7 @@ public class AuctionVm
     [DataType(DataType.DateTime)]
     public DateTime EndDateTime { get; set; }
 
+    [ScaffoldColumn(false)]
     public string SellerUsername { get; set; }
 
     public static AuctionVm FromAuction(Auction auction)
@@ -39,4 +42,18 @@ public class AuctionVm
             SellerUsername = auction.SellerUsername
         };
     }
+
+    /*
+     public Auction ToAuction()
+    {
+        return new Auction
+        {
+            Id = this.Id,
+            Name = this.Name,
+            Description = this.Description,
+            StartingPrice = this.StartingPrice,
+            EndDateTime = this.EndDateTime,
+            SellerUsername = this.SellerUsername
+        };
+    }*/
 }

@@ -18,19 +18,19 @@ public class AuctionDbContext : DbContext
         modelBuilder.Entity<AuctionDB>().HasData(
             new AuctionDB
             {
-                Id = 1,
+                Id = -1,
                 name = "ragnar",
                 description = "Auction description",
-                Enddate = DateTime.Today,
+                Enddate = DateTime.Today.AddDays(7),
                 price = 45,
                 Sellername = "Seller"
             },
             new AuctionDB
             {
-                Id = 2,
+                Id = -2,
                 name = "bartil",
                 description = "Old ferrari",
-                Enddate = DateTime.Today,
+                Enddate = DateTime.Today.AddDays(10),
                 price = 25000,
                 Sellername = "bertil"
             }
@@ -40,19 +40,19 @@ public class AuctionDbContext : DbContext
         modelBuilder.Entity<BidsDb>().HasData(
             new BidsDb
             {
-                Id = 1,
-                AuctionId = 1,  // Refers to the first AuctionDB entry
+                Id = -1,
+                AuctionId = -1,  // Refers to the first AuctionDB entry
                 Bidamount = 35,
                 Biddername = "byuer",
-                Bidtime = DateTime.Today
+                Bidtime = DateTime.Today.AddDays(5)
             },
             new BidsDb
             {
-                Id = 2,
-                AuctionId = 2,  // Refers to the second AuctionDB entry
+                Id = -2,
+                AuctionId = -2,  // Refers to the second AuctionDB entry
                 Bidamount = 20000,
                 Biddername = "Kalle",
-                Bidtime = DateTime.Today
+                Bidtime = DateTime.Today.AddDays(8)
             }
         );
 /*
@@ -61,7 +61,7 @@ public class AuctionDbContext : DbContext
             {
                 id = 1,
                 Password = "Orvar123!",
-                    Username = "Bertil@kth.se",
+                    Username = "Bertil@kth.se", 
             },
             new UserDb
             {
