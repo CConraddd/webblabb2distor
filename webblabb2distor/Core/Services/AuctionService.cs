@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using webblabb2distor.Core.Interfaces;
 using System;
-
+//Kan inte hämta details på en auktion för username är null!
 namespace webblabb2distor.Core.Services
 {
     public class AuctionService : IAuctionService
@@ -20,7 +20,7 @@ namespace webblabb2distor.Core.Services
 
         public void EditDescription(int auctionId, string newDescription)
         {
-            var auction = _auctionPersistence.GetAuctionById(auctionId, username: null);
+            var auction = _auctionPersistence.GetAuctionById(auctionId);
             if (auction != null)
             {
                 auction.Description = newDescription;
@@ -35,7 +35,7 @@ namespace webblabb2distor.Core.Services
 
         public Auction GetDetails(int auctionId)
         {
-            var auction = _auctionPersistence.GetAuctionById(auctionId, username: null);
+            var auction = _auctionPersistence.GetAuctionById(auctionId);
             if (auction == null)
             {
                 throw new Exception("Auction not found");

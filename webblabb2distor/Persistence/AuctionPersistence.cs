@@ -29,20 +29,20 @@ namespace webblabb2distor.Persistence
             return auctionDbs.Select(a => _mapper.Map<Auction>(a)).ToList();
         }
 
-        public Auction GetAuctionById(int auctionId, string username)
+        public Auction GetAuctionById(int auctionId)
         {
             var auctionDb = _dbContext.AuctionDbs
-                .Where(a => a.Id == auctionId && a.Sellername == username)
                 .Include(a => a.BidsDbs)
-                .FirstOrDefault();
+                .FirstOrDefault(a => a.Id == auctionId);
 
             if (auctionDb == null) throw new DataException("Auction not found");
 
             var auction = _mapper.Map<Auction>(auctionDb);
-            auction.Bids = auctionDb.BidsDbs.Select(b => _mapper.Map<Bid>(b)).ToList(); // Mapping av Bids separat
+            auction.Bids = auctionDb.BidsDbs.Select(b => _mapper.Map<Bid>(b)).ToList();
 
             return auction;
         }
+
 
         public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string userName)
         {

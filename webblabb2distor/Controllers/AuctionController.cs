@@ -9,7 +9,6 @@ namespace webblabb2distor.Controllers
     {
         private readonly IAuctionService _auctionService;
         private readonly IBidService _bidService;
-        private readonly string _testUserName = "testuser"; //hårdkodad user
 
         public AuctionController(IAuctionService auctionService, IBidService bidService)
         {
@@ -19,9 +18,14 @@ namespace webblabb2distor.Controllers
         // GET: AuctionControllers
         public ActionResult Index()
         {
-            var auctions = _auctionService.GetAllActiveAuctions();
-            var auctionsVms = auctions.Select(AuctionVm.FromAuction).ToList();
-            return View(auctionsVms);
+            var activeAuctions = _auctionService.GetAllActiveAuctions();
+            var auctionVms = new List<AuctionVm>();
+            foreach (var auction in activeAuctions)
+            {
+                auctionVms.Add(AuctionVm.FromAuction(auction));
+            }
+
+            return View(auctionVms);
         }
 
 
@@ -33,7 +37,7 @@ namespace webblabb2distor.Controllers
                 var auction = _auctionService.GetDetails(id);
                 if (auction == null)
                 {
-                    return NotFound("Auction not found.");
+                    return BadRequest();
                 }
 
                 var auctionDetailsVm = AuctionDetailsVm.FromAuction(auction);
@@ -57,12 +61,10 @@ namespace webblabb2distor.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(AuctionVm auctionVm)
         {
-            // Ta bort SellerUsername från ModelState för att undvika validering
             ModelState.Remove(nameof(auctionVm.SellerUsername));
 
-            // Tilldela SellerUsername baserat på den inloggade användaren
-            auctionVm.SellerUsername = User?.Identity?.IsAuthenticated == true ? User.Identity.Name : _testUserName;
-
+            auctionVm.SellerUsername = User.Identity.Name;
+            
             if (!ModelState.IsValid)
             {
                 Console.WriteLine("ModelState is invalid.");
@@ -77,7 +79,6 @@ namespace webblabb2distor.Controllers
             }
             try
             {
-                // Om ModelState är giltigt, skapa auktionen
                 _auctionService.CreateAuction(
                     auctionVm.Name, 
                     auctionVm.Description, 
@@ -85,7 +86,7 @@ namespace webblabb2distor.Controllers
                     auctionVm.EndDateTime, 
                     auctionVm.SellerUsername);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

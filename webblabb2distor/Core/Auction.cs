@@ -7,7 +7,7 @@ public class Auction
     public string Description { get; set; }
     public decimal StartingPrice { get; set; }
     public DateTime EndDateTime { get; set; }
-    public string SellerUsername { get; set; }  // Changed to string
+    public string SellerUsername { get; set; } 
     public List<Bid> Bids { get; set; }
     public Auction()
     {

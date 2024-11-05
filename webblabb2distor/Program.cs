@@ -23,16 +23,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Register Identity with ApplicationDbContext
 builder.Services.AddDefaultIdentity<webblabb2distorUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>(); // Use ApplicationDbContext for Identity
-
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddDbContext<UserDbcontext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("IdentityDbConnection"))); 
 
-
 // Register AuctionDbContext for Auction data
 builder.Services.AddDbContext<AuctionDbContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("ProjectDbConnection")));
+    options.UseMySQL(builder.Configuration.GetConnectionString("AuctionDbConnection")));
 
 var app = builder.Build();
 
@@ -50,6 +48,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Auction}/{action=Index}/{id?}");
 
 app.Run();
