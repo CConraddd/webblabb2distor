@@ -1,0 +1,44 @@
+﻿@model IEnumerable<webblabb2distor.Models.Auctions.AuctionVm>
+
+@{
+    ViewData["Title"] = "My Won Auctions";
+}
+
+<h1>My Won Auctions</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <p>You haven't won any auctions yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Winning Bid</th>
+            <th>End Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var auction in Model)
+        {
+            <tr>
+                <td>@auction.Name</td>
+                <td>@auction.Description</td>
+                <td>
+                    @(auction.Bids != null && auction.Bids.Any()
+                        ? auction.Bids.Max(b => b.BidAmount)
+                        : auction.StartingPrice)
+                </td>
+                <td>@auction.EndDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@auction.Id" class="btn btn-info">View Auction</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

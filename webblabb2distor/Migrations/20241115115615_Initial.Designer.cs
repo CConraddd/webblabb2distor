@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using webblabb2distor.Areas.Identity.Data;
+using webblabb2distor.Data;
 
 #nullable disable
 
 namespace webblabb2distor.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241105142624_App")]
-    partial class App
+    [DbContext(typeof(webblabb2distorContext))]
+    [Migration("20241115115615_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

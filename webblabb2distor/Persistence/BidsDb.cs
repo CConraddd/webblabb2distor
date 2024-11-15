@@ -10,14 +10,13 @@ namespace webblabb2distor.Persistence;
 public class BidsDb
 {
     [Key]
-    public int Id { get; set; } // Use 'Id' for consistency
-   // [Required]
+    public int Id { get; set; }
+    //[Required]
     //public int AuctionId { get; set; }
     [Required]
     public decimal Bidamount { get; set; }
     [Required]
     public string Biddername { get; set; }
-    
     
     [Required]
     [DataType(DataType.DateTime)]

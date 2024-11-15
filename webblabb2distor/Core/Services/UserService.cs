@@ -8,15 +8,15 @@ public class UserService
     {
         _users = new List<User>
         {
-            new User { Id = 1, Username = "user1@gmail.com", Password = "password1" },
-            new User { Id = 2, Username = "user2@gmail.com", Password = "password2" },
-            new User { Id = 3, Username = "user3@gmail.com", Password = "password3" }
+            new User { id = 1, Username = "user1@gmail.com", Password = "password1" },
+            new User { id = 2, Username = "user2@gmail.com", Password = "password2" },
+            new User { id = 3, Username = "user3@gmail.com", Password = "password3" }
         };
     }
     
     public User GetUserById(int userId)
     {
-        return _users.Find(u => u.Id == userId);
+        return _users.Find(u => u.id == userId);
     }
 
     public User GetUserByUsername(string username)
@@ -26,8 +26,8 @@ public class UserService
 
     public void addUser(User user)
     {
-        int newId = _users.Max(u => u.Id) + 1;
-        var newUser = new User { Id = newId, Username = user.Username, Password = user.Password };
+        int newId = _users.Max(u => u.id) + 1;
+        var newUser = new User { id = newId, Username = user.Username, Password = user.Password };
         _users.Add(newUser);
     }
 

@@ -19,15 +19,33 @@ namespace webblabb2distor.Persistence
             _dbContext = dbContext;
             _mapper = mapper;
         }
-
+        
         public List<Auction> GetActiveAuctions()
         {
             var auctionDbs = _dbContext.AuctionDbs
-                .Where(a => a.Enddate > DateTime.Now)
+                .Include(a => a.BidsDbs)
+                .Where(a => a.EndDateTime > DateTime.Now)
                 .ToList();
+
+            Console.WriteLine($"Antal aktiva auktioner hittade: {auctionDbs.Count}");
+            return auctionDbs.Select(a => _mapper.Map<Auction>(a)).ToList();
+        }
+        
+        public List<Auction> GetAllAuctions()
+        {
+            var auctionDbs = _dbContext.AuctionDbs
+                .Include(a => a.BidsDbs)
+                .ToList();
+
+            Console.WriteLine($"Antal auktioner hämtade: {auctionDbs.Count}");
+            foreach (var auctionDb in auctionDbs)
+            {
+                Console.WriteLine($"Auction ID: {auctionDb.Id}, Bids Count: {auctionDb.BidsDbs.Count}");
+            }
 
             return auctionDbs.Select(a => _mapper.Map<Auction>(a)).ToList();
         }
+
 
         public Auction GetAuctionById(int auctionId)
         {
@@ -35,12 +53,13 @@ namespace webblabb2distor.Persistence
                 .Include(a => a.BidsDbs)
                 .FirstOrDefault(a => a.Id == auctionId);
 
-            if (auctionDb == null) throw new DataException("Auction not found");
+            if (auctionDb == null)
+            {
+                Console.WriteLine($"Auction with ID {auctionId} not found in database.");
+                return null;
+            }
 
-            var auction = _mapper.Map<Auction>(auctionDb);
-            auction.Bids = auctionDb.BidsDbs.Select(b => _mapper.Map<Bid>(b)).ToList();
-
-            return auction;
+            return _mapper.Map<Auction>(auctionDb);
         }
 
 
@@ -50,11 +69,11 @@ namespace webblabb2distor.Persistence
             {
                 var auctionDb = new AuctionDB
                 {
-                    name = name,
-                    description = description,
-                    price = startingPrice,
-                    Enddate = endDate,
-                    Sellername = userName
+                    Name = name,
+                    Description = description,
+                    StartingPrice = startingPrice,
+                    EndDateTime = endDate,
+                    SellerUsername = userName
                 };
 
                 _dbContext.AuctionDbs.Add(auctionDb);
@@ -71,8 +90,23 @@ namespace webblabb2distor.Persistence
         {
             try
             {
-                var auctionDb = _mapper.Map<AuctionDB>(auction);
-                _dbContext.AuctionDbs.Update(auctionDb);
+                var auctionDb = _dbContext.AuctionDbs
+                    .Include(a => a.BidsDbs) 
+                    .FirstOrDefault(a => a.Id == auction.Id);
+
+                if (auctionDb == null)
+                {
+                    throw new DataException("Auction not found.");
+                }
+
+                _mapper.Map(auction, auctionDb);
+
+                auctionDb.BidsDbs.Clear();
+                foreach (var bid in auction.Bids)
+                {
+                    auctionDb.BidsDbs.Add(_mapper.Map<BidsDb>(bid));
+                }
+
                 _dbContext.SaveChanges();
             }
             catch (DbUpdateException ex)
@@ -81,6 +115,7 @@ namespace webblabb2distor.Persistence
                 throw new DataException("Could not update the auction in the database.", ex);
             }
         }
+
 
         public void DeleteAuction(int auctionId)
         {

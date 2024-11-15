@@ -1,0 +1,36 @@
+﻿@model IEnumerable<webblabb2distor.Models.Auctions.BidVm>
+
+@{
+    ViewData["Title"] = "My Active Bids";
+}
+
+<h1>My Active Bids</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <p>You haven't placed bids on any auctions.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Bid Amount</th>
+            <th>Bid Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var bid in Model)
+        {
+            <tr>
+                <td>@bid.BidAmount</td>
+                <td>@bid.BidTime.ToString("g")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@bid.AuctionId" class="btn btn-info">View Auction</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

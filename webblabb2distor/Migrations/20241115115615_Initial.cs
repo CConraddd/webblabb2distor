@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace webblabb2distor.Migrations
 {
     /// <inheritdoc />
-    public partial class App : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

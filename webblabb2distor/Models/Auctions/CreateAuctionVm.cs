@@ -11,7 +11,7 @@ public class CreateAuctionVm
     public string Name { get; set; }
 
     [Required(ErrorMessage = "Starting Price is required")]
-    [Range(0.01, double.MaxValue, ErrorMessage = "Starting Price must be a positive number")]
+    [Range(0.1, double.MaxValue, ErrorMessage = "Starting Price must be a positive number")]
     public decimal StartingPrice { get; set; }
 
     [Required(ErrorMessage = "End Date is required")]

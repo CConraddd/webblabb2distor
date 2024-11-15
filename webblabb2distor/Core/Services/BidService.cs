@@ -18,25 +18,20 @@ public class BidService : IBidService
         {
             throw new InvalidOperationException("Auction is either invalid, or end date is invalid.");
         }
-        decimal highestBid;
 
         if (auction.SellerUsername == bidderUsername)
         {
             throw new InvalidOperationException("You cannot place bid on your own auction.");
         }
-        if (auction.Bids.Any())
-        {
-            highestBid = auction.Bids.Max(b => b.Amount);
-        }
-        else
-        {
-            highestBid = auction.StartingPrice;
-        }
+
+        decimal highestBid = auction.Bids.Any() ? auction.Bids.Max(b => b.Bidamount) : auction.StartingPrice;
         if (bidAmount <= highestBid)
         {
             throw new InvalidOperationException("Bid is not higher than the highest bid.");
         }
-        auction.Bids.Add(new Bid(auction.Bids.Count + 1, auctionId, bidderUsername, bidAmount, DateTime.Now));
+
+        var newBid = new Bid { Biddername = bidderUsername, Bidamount = bidAmount, Bidtime = DateTime.Now };
+        _auctionService.AddBidToAuction(auctionId, newBid);
     }
 
     public IEnumerable<Bid> GetBidsForAuction(int auctionId)
@@ -46,12 +41,31 @@ public class BidService : IBidService
         {
             return new List<Bid>();
         }
-        return auction.Bids.OrderByDescending(b => b.Amount);
+        return auction.Bids.OrderByDescending(b => b.Bidamount);
     }
 
     public IEnumerable<Bid> GetBidsByUsername(string username)
     {
-        var auctions = _auctionService.GetAllActiveAuctions();
-        return auctions.SelectMany(a => a.Bids.Where(b => b.BidderUsername == username));
+        var auctions = _auctionService.GetAllAuctions();
+
+        foreach (var auction in auctions)
+        {
+            Console.WriteLine($"Auction ID: {auction.Id}, Name: {auction.Name}, Bids Count: {auction.Bids.Count}");
+        }
+
+        var userBids = auctions
+            .SelectMany(a => a.Bids)
+            .Where(b => b.Biddername == username)
+            .ToList();
+
+        foreach (var bid in userBids)
+        {
+            Console.WriteLine($"Bid ID: {bid.Id}, Auction ID: {bid.AuctionId}, Amount: {bid.Bidamount}");
+        }
+
+        return userBids;
     }
+
+
+
 }

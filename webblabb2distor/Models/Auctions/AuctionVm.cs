@@ -29,6 +29,7 @@ public class AuctionVm
 
     [ScaffoldColumn(false)]
     public string SellerUsername { get; set; }
+    public List<BidVm> Bids { get; set; }
 
     public static AuctionVm FromAuction(Auction auction)
     {
@@ -39,7 +40,8 @@ public class AuctionVm
             Description = auction.Description,
             StartingPrice = auction.StartingPrice,
             EndDateTime = auction.EndDateTime,
-            SellerUsername = auction.SellerUsername
+            SellerUsername = auction.SellerUsername,
+            Bids = auction.Bids.Select(BidVm.FromBid).ToList()
         };
     }
 
