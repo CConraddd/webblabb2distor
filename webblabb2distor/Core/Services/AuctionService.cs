@@ -50,12 +50,14 @@ namespace webblabb2distor.Core.Services
             return auction;
         }
 
+        
+        //returns auctionbyusername
         public IEnumerable<Auction> GetAuctionsByUserName(string username)
         {
             return _auctionPersistence.GetActiveAuctions()
                 .Where(a => a.SellerUsername == username);
         }
-        
+        //returns all auctions
         public List<Auction> GetAllAuctions()
         {
             var auctions = _auctionPersistence.GetAllAuctions();
@@ -65,7 +67,7 @@ namespace webblabb2distor.Core.Services
             }
             return auctions;
         }
-        
+        //returns all won auctions
         public IEnumerable<Auction> GetWonAuctions(string username)
         {
             var allAuctions = _auctionPersistence.GetAllAuctions();
@@ -73,12 +75,12 @@ namespace webblabb2distor.Core.Services
                 .Where(a => a.Bids.Any(b => b.Biddername == username && b.Bidamount == a.Bids.Max(bid => bid.Bidamount))
                             && a.EndDateTime < DateTime.Now);
         }
-
+        //delets a selected auction
         public void DeleteAuction(int auctionId)
         {
             _auctionPersistence.DeleteAuction(auctionId);
         }
-        
+        //adds bid to auction
         public void AddBidToAuction(int auctionId, Bid bid)
         {
             var auction = _auctionPersistence.GetAuctionById(auctionId);

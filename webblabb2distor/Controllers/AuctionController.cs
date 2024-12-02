@@ -177,7 +177,7 @@ namespace webblabb2distor.Controllers
         }
 
 
-
+//returns my won auctions to the user
         public ActionResult MyWonAuctions()
         {
             var wonAuctions = _auctionService.GetWonAuctions(User.Identity.Name);
@@ -185,6 +185,7 @@ namespace webblabb2distor.Controllers
             return View(auctionVms);
         }
         
+        //places bid
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult PlaceBid(int auctionId, decimal bidAmount)
