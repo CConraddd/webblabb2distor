@@ -46,7 +46,9 @@ public class BidService : IBidService
 //retuns bids from selected username
     public IEnumerable<Bid> GetBidsByUsername(string username)
     {
-        var auctions = _auctionService.GetAllAuctions();
+        var auctions = _auctionService.GetAllAuctions()
+            .Where(a => a.EndDateTime > DateTime.Now) // Endast pågående auktioner
+            .ToList();
 
         foreach (var auction in auctions)
         {
@@ -56,15 +58,18 @@ public class BidService : IBidService
         var userBids = auctions
             .SelectMany(a => a.Bids)
             .Where(b => b.Biddername == username)
+            .GroupBy(b => b.AuctionId) // Grupp efter auktion
+            .Select(g => g.OrderByDescending(b => b.Bidtime).FirstOrDefault()) // Ta senaste budet per auktion
             .ToList();
 
         foreach (var bid in userBids)
         {
-            Console.WriteLine($"Bid ID: {bid.Id}, Auction ID: {bid.AuctionId}, Amount: {bid.Bidamount}");
+            Console.WriteLine($"Latest Bid - Bid ID: {bid.Id}, Auction ID: {bid.AuctionId}, Amount: {bid.Bidamount}");
         }
 
         return userBids;
     }
+
 
 
 

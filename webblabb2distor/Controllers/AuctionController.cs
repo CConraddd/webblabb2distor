@@ -123,18 +123,15 @@ namespace webblabb2distor.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    _auctionService.EditDescription(id, auctionVm.Description);
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(auctionVm);
+                _auctionService.EditDescription(id, auctionVm.Description);
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(auctionVm);
             }
         }
+
 
         // GET: AuctionController/Delete/5
         public ActionResult Delete(int id)

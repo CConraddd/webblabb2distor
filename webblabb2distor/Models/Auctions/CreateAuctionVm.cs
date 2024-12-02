@@ -16,7 +16,7 @@ public class CreateAuctionVm
 
     [Required(ErrorMessage = "End Date is required")]
     [Display(Name = "End Date")]
-    [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
     [DataType(DataType.DateTime)]
     public DateTime EndDateTime { get; set; }
 }
