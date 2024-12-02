@@ -23,10 +23,19 @@ namespace webblabb2distor.Core.Services
         public void EditDescription(int auctionId, string newDescription)
         {
             var auction = _auctionPersistence.GetAuctionById(auctionId);
-            if (auction != null)
+            if (auction == null)
             {
-                auction.Description = newDescription;
+                throw new DataException("Auction not found");
+            }
+
+            auction.Description = newDescription;
+            try
+            {
                 _auctionPersistence.UpdateAuction(auction);
+            }
+            catch
+            {
+                throw new DataException("Could not update auction");
             }
         }
 

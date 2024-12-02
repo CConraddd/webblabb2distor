@@ -23,13 +23,13 @@ public class AuctionVm
 
     [Required(ErrorMessage = "End Date is required")]
     [Display(Name = "End Date")]
-    [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
     [DataType(DataType.DateTime)]
     public DateTime EndDateTime { get; set; }
 
     [ScaffoldColumn(false)]
     public string SellerUsername { get; set; }
-    public List<BidVm> Bids { get; set; }
+    public List<BidVm> Bids { get; set; } = new List<BidVm>();
 
     public static AuctionVm FromAuction(Auction auction)
     {
@@ -44,18 +44,4 @@ public class AuctionVm
             Bids = auction.Bids.Select(BidVm.FromBid).ToList()
         };
     }
-
-    /*
-     public Auction ToAuction()
-    {
-        return new Auction
-        {
-            Id = this.Id,
-            Name = this.Name,
-            Description = this.Description,
-            StartingPrice = this.StartingPrice,
-            EndDateTime = this.EndDateTime,
-            SellerUsername = this.SellerUsername
-        };
-    }*/
 }
