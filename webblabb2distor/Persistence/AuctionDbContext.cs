@@ -21,20 +21,20 @@ public class AuctionDbContext : DbContext
             new AuctionDB
             {
                 Id = -1,
-                name = "ragnar",
-                description = "Auction description",
-                Enddate = DateTime.Today.AddDays(7),
-                price = 45,
-                Sellername = "Seller"
+                Name = "ragnar",
+                Description = "Auction description",
+                EndDateTime = DateTime.Today.AddDays(7),
+                StartingPrice = 45,
+                SellerUsername = "Seller"
             },
             new AuctionDB
             {
                 Id = -2,
-                name = "bartil",
-                description = "Old ferrari",
-                Enddate = DateTime.Today.AddDays(10),
-                price = 25000,
-                Sellername = "bertil"
+                Name = "bartil",
+                Description = "Old ferrari",
+                EndDateTime = DateTime.Today.AddDays(10),
+                StartingPrice = 25000,
+                SellerUsername = "bertil"
             }
         );
 
@@ -43,7 +43,7 @@ public class AuctionDbContext : DbContext
             new BidsDb
             {
                 Id = -1,
-                AuctionId = -1,  // Refers to the first AuctionDB entry
+                AuctionId = -1,
                 Bidamount = 35,
                 Biddername = "byuer",
                 Bidtime = DateTime.Today.AddDays(5)
@@ -51,11 +51,19 @@ public class AuctionDbContext : DbContext
             new BidsDb
             {
                 Id = -2,
-                AuctionId = -2,  // Refers to the second AuctionDB entry
+                AuctionId = -2,
                 Bidamount = 20000,
                 Biddername = "Kalle",
                 Bidtime = DateTime.Today.AddDays(8)
-            }
+            },
+            new BidsDb
+                {
+                    Id = 1,
+                    AuctionId = -1,
+                    Bidamount = 50,
+                    Biddername = "ferrari@gmail.com",
+                    Bidtime = DateTime.Now
+                }
         );
 /*
         modelBuilder.Entity<UserDb>().HasData(

@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using webblabb2distor.Core;
 using webblabb2distor.Core.Interfaces;
 using webblabb2distor.Models.Auctions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace webblabb2distor.Controllers
 {
+    [Authorize]
     public class AuctionController : Controller
     {
         private readonly IAuctionService _auctionService;
@@ -34,21 +36,29 @@ namespace webblabb2distor.Controllers
         {
             try
             {
+                Console.WriteLine($"Fetching details for Auction ID: {id}");
                 var auction = _auctionService.GetDetails(id);
+
                 if (auction == null)
                 {
-                    return BadRequest();
+                    Console.WriteLine($"Auction with ID {id} not found.");
+                    return NotFound("Auction not found");
                 }
 
+                Console.WriteLine($"Auction details found: {auction.Name}, with {auction.Bids.Count} bids.");
+
                 var auctionDetailsVm = AuctionDetailsVm.FromAuction(auction);
-                auctionDetailsVm.Bids = auction.Bids.OrderByDescending(b => b.Amount).Select(BidVm.FromBid).ToList();
+                auctionDetailsVm.Bids = auction.Bids.OrderByDescending(b => b.Bidamount).Select(BidVm.FromBid).ToList();
+
                 return View(auctionDetailsVm);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in Details: {ex.Message}");
                 return BadRequest(ex.Message);
             }
         }
+
 
         // GET: AuctionControllers/Create
         public ActionResult Create()
@@ -157,20 +167,37 @@ namespace webblabb2distor.Controllers
         // GET: AuctionController/MyBids
         public ActionResult MyBids()
         {
-            var auctions = _bidService.GetBidsByUsername(User.Identity.Name)
-                .Where(b => b.Auction.EndDateTime > DateTime.Now)
-                .Select(b => b.Auction)
-                .Distinct();
-            var auctionVms = auctions.Select(AuctionVm.FromAuction).ToList();
-            return View(auctionVms);
+            var userBids = _bidService.GetBidsByUsername(User.Identity.Name);
+            foreach (var bid in userBids)
+            {
+                Console.WriteLine($"Bid ID: {bid.Id}, Auction ID: {bid.AuctionId}, Amount: {bid.Bidamount}, Bidder: {bid.Biddername}");
+            }
+            var bidVms = userBids.Select(b => BidVm.FromBid(b)).ToList();
+            return View(bidVms);
         }
 
-        // GET: AuctionController/MyWonAuctions
+
+
         public ActionResult MyWonAuctions()
         {
             var wonAuctions = _auctionService.GetWonAuctions(User.Identity.Name);
             var auctionVms = wonAuctions.Select(AuctionVm.FromAuction).ToList();
             return View(auctionVms);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult PlaceBid(int auctionId, decimal bidAmount)
+        {
+            try
+            {
+                _bidService.PlaceBid(auctionId, User.Identity.Name, bidAmount);
+                return RedirectToAction("Details", new { id = auctionId });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

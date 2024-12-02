@@ -9,17 +9,17 @@ public class AuctionDB
     
     [Required]
     [MaxLength(100)]
-    public String name { get; set; }
+    public String Name { get; set; }
     [Required]
-    public String description { get; set; }
+    public String Description { get; set; }
     [Required]
-    public decimal price { get; set; }
+    public decimal StartingPrice { get; set; }
     
     [Required]
     [DataType(DataType.DateTime)]
-    public DateTime Enddate { get; set; }
+    public DateTime EndDateTime{ get; set; }
     [Required]
-    public string Sellername { get; set; }
+    public string SellerUsername { get; set; }
     [Required]
     public List<BidsDb> BidsDbs { get; set; } = new List<BidsDb>();
 }

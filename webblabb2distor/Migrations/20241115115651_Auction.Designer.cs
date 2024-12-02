@@ -11,7 +11,7 @@ using webblabb2distor.Persistence;
 namespace webblabb2distor.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20241105142548_Auction")]
+    [Migration("20241115115651_Auction")]
     partial class Auction
     {
         /// <inheritdoc />
@@ -28,23 +28,23 @@ namespace webblabb2distor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Enddate")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Sellername")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<decimal>("price")
+                    b.Property<string>("SellerUsername")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("StartingPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -55,20 +55,20 @@ namespace webblabb2distor.Migrations
                         new
                         {
                             Id = -1,
-                            Enddate = new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            Sellername = "Seller",
-                            description = "Auction description",
-                            name = "ragnar",
-                            price = 45m
+                            Description = "Auction description",
+                            EndDateTime = new DateTime(2024, 11, 22, 0, 0, 0, 0, DateTimeKind.Local),
+                            Name = "ragnar",
+                            SellerUsername = "Seller",
+                            StartingPrice = 45m
                         },
                         new
                         {
                             Id = -2,
-                            Enddate = new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            Sellername = "bertil",
-                            description = "Old ferrari",
-                            name = "bartil",
-                            price = 25000m
+                            Description = "Old ferrari",
+                            EndDateTime = new DateTime(2024, 11, 25, 0, 0, 0, 0, DateTimeKind.Local),
+                            Name = "bartil",
+                            SellerUsername = "bertil",
+                            StartingPrice = 25000m
                         });
                 });
 
@@ -104,7 +104,7 @@ namespace webblabb2distor.Migrations
                             AuctionId = -1,
                             Bidamount = 35m,
                             Biddername = "byuer",
-                            Bidtime = new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Local)
+                            Bidtime = new DateTime(2024, 11, 20, 0, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
@@ -112,7 +112,15 @@ namespace webblabb2distor.Migrations
                             AuctionId = -2,
                             Bidamount = 20000m,
                             Biddername = "Kalle",
-                            Bidtime = new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Local)
+                            Bidtime = new DateTime(2024, 11, 23, 0, 0, 0, 0, DateTimeKind.Local)
+                        },
+                        new
+                        {
+                            Id = 1,
+                            AuctionId = -1,
+                            Bidamount = 50m,
+                            Biddername = "ferrari@gmail.com",
+                            Bidtime = new DateTime(2024, 11, 15, 12, 56, 51, 106, DateTimeKind.Local).AddTicks(3780)
                         });
                 });
 

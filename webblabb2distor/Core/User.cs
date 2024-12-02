@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class User
 {
-    public int Id { get; set; }
+    public int id { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
     

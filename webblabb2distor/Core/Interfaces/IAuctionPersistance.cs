@@ -11,4 +11,5 @@ public interface IAuctionPersistence
     List<Auction> GetActiveAuctions();
     void UpdateAuction(Auction auction);
     void DeleteAuction(int auctionId);
+    public List<Auction> GetAllAuctions();
 }

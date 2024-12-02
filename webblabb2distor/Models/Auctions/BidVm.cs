@@ -13,15 +13,17 @@ public class BidVm
     [Display(Name = "Bid Time")]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
     public DateTime BidTime { get; set; }
+    public int AuctionId { get; set; }
 
     public static BidVm FromBid(Bid bid)
     {
         return new BidVm
         {
             Id = bid.Id,
-            BidAmount = bid.Amount,
-            BidTime = bid.BidTime,
-            Bidder = bid.BidderUsername
+            AuctionId = bid.AuctionId,
+            BidAmount = bid.Bidamount,
+            BidTime = bid.Bidtime,
+            Bidder = bid.Biddername,
         };
     }
 }

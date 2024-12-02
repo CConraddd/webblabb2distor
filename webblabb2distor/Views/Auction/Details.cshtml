@@ -42,7 +42,55 @@
         </dd>
     </dl>
 </div>
+@if (User.Identity.IsAuthenticated && Model.SellerName != User.Identity.Name)
+{
+    <h4>Place a bid</h4>
+    <form asp-action="PlaceBid" method="post">
+        <input type="hidden" name="auctionId" value="@Model.Id"/>
+        <div class="form-group">
+            <label for="bidAmount">Bid Amount:</label>
+            <input type="number" name="bidAmount" class="form-control" step="0.01" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Place Bid</button>
+    </form>
+}
+else if (User.Identity.IsAuthenticated)
+{
+    <p class="text-muted">You cannot place a bid on your own auction.</p>
+}
+else
+{
+    <p class="text-muted">Please <a asp-area="Identity" asp-page="/Account/Login">log in</a> to place a bid.</p>
+}
+
+<h4>Current Bids</h4>
+@if (Model.Bids != null && Model.Bids.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Bidder</th>
+            <th>Bid Amount</th>
+            <th>Bid Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var bid in Model.Bids)
+        {
+            <tr>
+                <td>@bid.Bidder</td>
+                <td>@bid.BidAmount</td>
+                <td>@bid.BidTime.ToString("g")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No bids placed yet.</p>
+}
+
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using webblabb2distor.Areas.Identity.Data;
 using webblabb2distor.Core.Interfaces;
 using webblabb2distor.Core.Services;
+using webblabb2distor.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +19,12 @@ builder.Services.AddScoped<IAuctionPersistence, AuctionPersistence>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Register ApplicationDbContext for Identity (Users)
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<webblabb2distorContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("IdentityDbConnection")));
 
 // Register Identity with ApplicationDbContext
 builder.Services.AddDefaultIdentity<webblabb2distorUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<webblabb2distorContext>();
 
 builder.Services.AddDbContext<UserDbcontext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("IdentityDbConnection"))); 

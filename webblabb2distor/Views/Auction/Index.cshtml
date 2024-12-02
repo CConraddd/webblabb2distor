@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<webblabb2distor.Models.Auctions.AuctionVm>
 
 @{
-ViewData["Title"] = "Active Auctions";
+    ViewData["Title"] = "Active Auctions";
 }
 
 <!-- Navbar with Login/Register -->
@@ -12,13 +12,13 @@ ViewData["Title"] = "Active Auctions";
         <div class="ml-auto">
             @if (User.Identity.IsAuthenticated)
             {
-            <span class="navbar-text mr-3">Hello, @User.Identity.Name!</span>
-            <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+                <span class="navbar-text mr-3">Hello, @User.Identity.Name!</span>
+                <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
             }
             else
             {
-            <a class="btn btn-outline-primary mr-2" asp-area="Identity" asp-page="/Account/Login">Login</a>
-            <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                <a class="btn btn-outline-primary mr-2" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register">Register</a>
             }
         </div>
     </div>
@@ -28,48 +28,57 @@ ViewData["Title"] = "Active Auctions";
     <h1 class="display-4">Active Auctions</h1>
 </div>
 
+<!-- User-specific buttons for won auctions and active bids -->
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="d-flex justify-content-center my-3">
+        <a asp-action="MyWonAuctions" class="btn btn-outline-primary mx-2">My Won Auctions</a>
+        <a asp-action="MyBids" class="btn btn-outline-secondary mx-2">My Active Bids</a>
+    </div>
+}
+
 <!-- Display message if there are no auctions -->
 @if (Model == null || !Model.Any())
 {
-<p class="text-center">No active auctions available at the moment.</p>
+    <p class="text-center">No active auctions available at the moment.</p>
 }
 else
 {
-<!-- Table for listing all active auctions -->
-<table class="table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Starting Price</th>
-        <th>End Date</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var auction in Model)
-    {
-    <tr>
-        <td>@auction.Name</td>
-        <td>@auction.Description</td>
-        <td>@auction.StartingPrice</td>
-        <td>@auction.EndDateTime.ToString("yyyy-MM-dd")</td>
-        <td>
-            <a asp-action="Details" asp-route-id="@auction.Id" class="btn btn-info">Details</a>
-            @if (User.Identity.IsAuthenticated && auction.SellerUsername == User.Identity.Name)
-            {
-            <a asp-action="Edit" asp-route-id="@auction.Id" class="btn btn-warning">Edit</a>
-            <a asp-action="Delete" asp-route-id="@auction.Id" class="btn btn-danger">Delete</a>
-            }
-        </td>
-    </tr>
-    }
-    </tbody>
-</table>
+    <!-- Table for listing all active auctions -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Starting Price</th>
+            <th>End Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var auction in Model)
+        {
+            <tr>
+                <td>@auction.Name</td>
+                <td>@auction.Description</td>
+                <td>@auction.StartingPrice</td>
+                <td>@auction.EndDateTime.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@auction.Id" class="btn btn-info">Details</a>
+                    @if (User.Identity.IsAuthenticated && auction.SellerUsername == User.Identity.Name)
+                    {
+                        <a asp-action="Edit" asp-route-id="@auction.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@auction.Id" class="btn btn-danger">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 }
 
 <!-- Link to create a new auction -->
 @if (User.Identity.IsAuthenticated)
 {
-<a asp-controller="Auction" asp-action="Create" class="btn btn-success">Create New Auction</a>
+    <a asp-controller="Auction" asp-action="Create" class="btn btn-success">Create New Auction</a>
 }
