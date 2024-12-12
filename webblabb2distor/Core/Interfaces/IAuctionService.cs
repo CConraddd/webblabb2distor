@@ -9,6 +9,6 @@ public interface IAuctionService
     IEnumerable<Auction> GetAuctionsByUserName(string username);
     IEnumerable<Auction> GetWonAuctions(string username);
     void DeleteAuction(int auctionId);
-    public void AddBidToAuction(int auctionId, Bid bid);
-    public List<Auction> GetAllAuctions();
+    void AddBidToAuction(int auctionId, Bid bid);
+    List<Auction> GetAllAuctions();
 }

@@ -184,7 +184,7 @@ namespace webblabb2distor.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult PlaceBid(int auctionId, decimal bidAmount)
+        public ActionResult PlaceBid(int auctionId, decimal bidAmount)
         {
             try
             {

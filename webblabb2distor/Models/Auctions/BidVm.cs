@@ -9,7 +9,7 @@ public class BidVm
     public int Id { get; set; }
     public decimal BidAmount { get; set; }
     [Display(Name = "Bidder")]
-    public String Bidder { get; set; }
+    public string Bidder { get; set; }
     [Display(Name = "Bid Time")]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
     public DateTime BidTime { get; set; }

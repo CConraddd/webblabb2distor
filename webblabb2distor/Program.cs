@@ -26,9 +26,6 @@ builder.Services.AddDbContext<webblabb2distorContext>(options =>
 builder.Services.AddDefaultIdentity<webblabb2distorUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<webblabb2distorContext>();
 
-builder.Services.AddDbContext<UserDbcontext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("IdentityDbConnection"))); 
-
 // Register AuctionDbContext for Auction data
 builder.Services.AddDbContext<AuctionDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("AuctionDbConnection")));

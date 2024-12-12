@@ -63,21 +63,5 @@ public class AuctionDbContext : DbContext
                     Bidtime = DateTime.Now
                 }
         );
-/*
-        modelBuilder.Entity<UserDb>().HasData(
-            new UserDb
-            {
-                id = 1,
-                Password = "Orvar123!",
-                    Username = "Bertil@kth.se", 
-            },
-            new UserDb
-            {
-                id = 2,
-                Password = "123Gaming",
-                Username = "Kalle@kth.se",
-            }
-        );
-        */
     }
 }
