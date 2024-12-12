@@ -10,7 +10,7 @@ public class BidService : IBidService
     {
         _auctionService = auctionService;
     }
-
+//service for placing bid to an auction
     public void PlaceBid(int auctionId, string bidderUsername, decimal bidAmount)
     {
         var auction = _auctionService.GetDetails(auctionId);
@@ -33,7 +33,7 @@ public class BidService : IBidService
         var newBid = new Bid { Biddername = bidderUsername, Bidamount = bidAmount, Bidtime = DateTime.Now };
         _auctionService.AddBidToAuction(auctionId, newBid);
     }
-
+//returns bids from a selected auction
     public IEnumerable<Bid> GetBidsForAuction(int auctionId)
     {
         var auction = _auctionService.GetDetails(auctionId);
@@ -43,7 +43,7 @@ public class BidService : IBidService
         }
         return auction.Bids.OrderByDescending(b => b.Bidamount);
     }
-
+//retuns bids from selected username
     public IEnumerable<Bid> GetBidsByUsername(string username)
     {
         var auctions = _auctionService.GetAllAuctions()

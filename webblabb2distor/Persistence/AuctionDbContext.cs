@@ -6,6 +6,8 @@ namespace webblabb2distor.Persistence;
 
 public class AuctionDbContext : DbContext
 {
+
+    //creats the auction and bids for the database
     public AuctionDbContext(DbContextOptions<AuctionDbContext> options) : base(options) { }
 
     public DbSet<BidsDb> BidsDbs { get; set; }

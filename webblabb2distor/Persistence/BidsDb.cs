@@ -7,6 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webblabb2distor.Persistence;
 
+
+
+
 public class BidsDb
 {
     [Key]
