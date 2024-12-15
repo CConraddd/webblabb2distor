@@ -19,17 +19,19 @@ namespace webblabb2distor.Persistence
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        
+        //sorterar efter tid dom går ut
         public List<Auction> GetActiveAuctions()
         {
             var auctionDbs = _dbContext.AuctionDbs
                 .Include(a => a.BidsDbs)
                 .Where(a => a.EndDateTime > DateTime.Now)
+                .OrderBy(a => a.EndDateTime) // Sort auctions by EndDateTime in ascending order
                 .ToList();
 
             Console.WriteLine($"Antal aktiva auktioner hittade: {auctionDbs.Count}");
             return auctionDbs.Select(a => _mapper.Map<Auction>(a)).ToList();
         }
+
         
         public List<Auction> GetAllAuctions()
         {
