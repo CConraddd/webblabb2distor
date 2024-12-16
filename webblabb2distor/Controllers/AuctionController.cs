@@ -36,17 +36,13 @@ namespace webblabb2distor.Controllers
         {
             try
             {
-                Console.WriteLine($"Fetching details for Auction ID: {id}");
                 var auction = _auctionService.GetDetails(id);
 
                 if (auction == null)
                 {
-                    Console.WriteLine($"Auction with ID {id} not found.");
                     return NotFound("Auction not found");
                 }
-
-                Console.WriteLine($"Auction details found: {auction.Name}, with {auction.Bids.Count} bids.");
-
+                
                 var auctionDetailsVm = AuctionDetailsVm.FromAuction(auction);
                 auctionDetailsVm.Bids = auction.Bids.OrderByDescending(b => b.Bidamount).Select(BidVm.FromBid).ToList();
 
@@ -54,7 +50,6 @@ namespace webblabb2distor.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in Details: {ex.Message}");
                 return BadRequest(ex.Message);
             }
         }
@@ -68,42 +63,32 @@ namespace webblabb2distor.Controllers
 
         // POST: AuctionController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(AuctionVm auctionVm)
+        public IActionResult Create(CreateAuctionVm createAuctionVm)
         {
-            ModelState.Remove(nameof(auctionVm.SellerUsername));
-
-            auctionVm.SellerUsername = User.Identity.Name;
-            
             if (!ModelState.IsValid)
             {
-                Console.WriteLine("ModelState is invalid.");
-                foreach (var modelState in ModelState.Values)
-                {
-                    foreach (var error in modelState.Errors)
-                    {
-                        Console.WriteLine("Validation Error: " + error.ErrorMessage);
-                    }
-                }
-                return View(auctionVm);
+                return View(createAuctionVm);
             }
+
             try
             {
                 _auctionService.CreateAuction(
-                    auctionVm.Name, 
-                    auctionVm.Description, 
-                    auctionVm.StartingPrice, 
-                    auctionVm.EndDateTime, 
-                    auctionVm.SellerUsername);
+                    createAuctionVm.Name,
+                    createAuctionVm.Description,
+                    createAuctionVm.StartingPrice,
+                    createAuctionVm.EndDateTime,
+                    User.Identity.Name
+                );
 
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
-                return View();
+                Console.WriteLine($"Error creating auction: {ex.Message}");
+                return View(createAuctionVm);
             }
         }
+
         // GET: AuctionController/Edit/5
         public ActionResult Edit(int id)
         {
@@ -123,7 +108,7 @@ namespace webblabb2distor.Controllers
         {
             try
             {
-                _auctionService.EditDescription(id, auctionVm.Description);
+                _auctionService.EditDescription(id, auctionVm.Description, User.Identity.Name);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -152,7 +137,7 @@ namespace webblabb2distor.Controllers
         {
             try
             {
-                _auctionService.DeleteAuction(id);
+                _auctionService.DeleteAuction(id, User.Identity.Name);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -165,21 +150,24 @@ namespace webblabb2distor.Controllers
         public ActionResult MyBids()
         {
             var userBids = _bidService.GetBidsByUsername(User.Identity.Name);
-            foreach (var bid in userBids)
-            {
-                Console.WriteLine($"Bid ID: {bid.Id}, Auction ID: {bid.AuctionId}, Amount: {bid.Bidamount}, Bidder: {bid.Biddername}");
-            }
             var bidVms = userBids.Select(b => BidVm.FromBid(b)).ToList();
             return View(bidVms);
         }
 
 
-//returns my won auctions to the user
+        //returns my won auctions to the user
         public ActionResult MyWonAuctions()
         {
-            var wonAuctions = _auctionService.GetWonAuctions(User.Identity.Name);
-            var auctionVms = wonAuctions.Select(AuctionVm.FromAuction).ToList();
-            return View(auctionVms);
+            try
+            {
+                var wonAuctions = _auctionService.GetWonAuctions(User.Identity.Name);
+                var auctionVms = wonAuctions.Select(AuctionVm.FromAuction).ToList();
+                return View(auctionVms);
+            }
+            catch (Exception)
+            {
+                return View(new List<AuctionVm>());
+            }
         }
         
         //places bid

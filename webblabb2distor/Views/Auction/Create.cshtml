@@ -1,46 +1,40 @@
-@model webblabb2distor.Models.Auctions.AuctionVm
+@model webblabb2distor.Models.Auctions.CreateAuctionVm
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Auction";
 }
 
-<h1>Create</h1>
+<h1>Create Auction</h1>
 
-<h4>AuctionVm</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control"/>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartingPrice" class="control-label"></label>
-                <input asp-for="StartingPrice" class="form-control"/>
-                <span asp-validation-for="StartingPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDateTime" class="control-label"></label>
-                <input asp-for="EndDateTime" class="form-control" type="datetime-local"/>
-                <span asp-validation-for="EndDateTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
-            </div>
-        </form>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
 
+    <div class="form-group">
+        <label asp-for="StartingPrice" class="control-label"></label>
+        <input asp-for="StartingPrice" class="form-control" />
+        <span asp-validation-for="StartingPrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDateTime" class="control-label"></label>
+        <input asp-for="EndDateTime" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EndDateTime" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

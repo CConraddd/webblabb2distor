@@ -17,15 +17,29 @@ namespace webblabb2distor.Core.Services
 
         public void CreateAuction(string name, string description, decimal startingPrice, DateTime endDate, string sellerUsername)
         {
+            if (startingPrice <= 0)
+            {
+                throw new ArgumentException("Starting price must be greater than zero");
+            }
+
+            if (endDate < DateTime.Now)
+            {
+                throw new ArgumentException("End date must be in the future");
+            }
             _auctionPersistence.CreateAuction(name, description, startingPrice, endDate, sellerUsername);
         }
 
-        public void EditDescription(int auctionId, string newDescription)
+        public void EditDescription(int auctionId, string newDescription, string currentUser)
         {
             var auction = _auctionPersistence.GetAuctionById(auctionId);
             if (auction == null)
             {
                 throw new DataException("Auction not found");
+            }
+
+            if (auction.SellerUsername != currentUser)
+            {
+                throw new UnauthorizedAccessException("You are not authorized to edit this auction");
             }
 
             auction.Description = newDescription;
@@ -46,16 +60,13 @@ namespace webblabb2distor.Core.Services
 
         public Auction GetDetails(int auctionId)
         {
-            Console.WriteLine($"Fetching Auction with ID: {auctionId}");
             var auction = _auctionPersistence.GetAuctionById(auctionId);
 
             if (auction == null)
             {
-                Console.WriteLine($"Auction with ID {auctionId} not found.");
                 throw new Exception("Auction not found");
             }
-
-            Console.WriteLine($"Auction found: {auction.Name} with {auction.Bids.Count} bids.");
+            auction.Bids = auction.Bids.OrderByDescending(b => b.Bidamount).ToList();
             return auction;
         }
 
@@ -70,23 +81,30 @@ namespace webblabb2distor.Core.Services
         public List<Auction> GetAllAuctions()
         {
             var auctions = _auctionPersistence.GetAllAuctions();
-            foreach (var auction in auctions)
-            {
-                Console.WriteLine($"Auction ID: {auction.Id}, Name: {auction.Name}, Bids Count: {auction.Bids.Count}");
-            }
             return auctions;
         }
         //returns all won auctions
         public IEnumerable<Auction> GetWonAuctions(string username)
         {
             var allAuctions = _auctionPersistence.GetAllAuctions();
-            return allAuctions
-                .Where(a => a.Bids.Any(b => b.Biddername == username && b.Bidamount == a.Bids.Max(bid => bid.Bidamount))
-                            && a.EndDateTime < DateTime.Now);
+           return allAuctions.Where(a => a.EndDateTime <= DateTime.Now &&
+                                  a.Bids.Any(b => b.Biddername == username && 
+                                                  b.Bidamount == a.Bids.Max(bid => bid.Bidamount)));
         }
         //delets a selected auction
-        public void DeleteAuction(int auctionId)
+        public void DeleteAuction(int auctionId, string currentUser)
         {
+            var auction = _auctionPersistence.GetAuctionById(auctionId);
+            if (auction == null)
+            {
+                throw new Exception("Auction not found");
+            }
+
+            if (auction.SellerUsername != currentUser)
+            {
+                throw new UnauthorizedAccessException("You are not authorized to delete this auction.");
+            }
+
             _auctionPersistence.DeleteAuction(auctionId);
         }
         //adds bid to auction

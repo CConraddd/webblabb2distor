@@ -14,8 +14,7 @@ public class BidsDb
 {
     [Key]
     public int Id { get; set; }
-    //[Required]
-    //public int AuctionId { get; set; }
+
     [Required]
     public decimal Bidamount { get; set; }
     [Required]

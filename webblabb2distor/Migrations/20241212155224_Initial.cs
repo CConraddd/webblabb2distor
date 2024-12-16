@@ -9,7 +9,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace webblabb2distor.Migrations
 {
     /// <inheritdoc />
-    public partial class Auction : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,8 +63,8 @@ namespace webblabb2distor.Migrations
                 columns: new[] { "Id", "Description", "EndDateTime", "Name", "SellerUsername", "StartingPrice" },
                 values: new object[,]
                 {
-                    { -2, "Old ferrari", new DateTime(2024, 11, 25, 0, 0, 0, 0, DateTimeKind.Local), "bartil", "bertil", 25000m },
-                    { -1, "Auction description", new DateTime(2024, 11, 22, 0, 0, 0, 0, DateTimeKind.Local), "ragnar", "Seller", 45m }
+                    { -2, "Old ferrari", new DateTime(2024, 12, 22, 0, 0, 0, 0, DateTimeKind.Local), "bartil", "bertil", 25000m },
+                    { -1, "Auction description", new DateTime(2024, 12, 19, 0, 0, 0, 0, DateTimeKind.Local), "ragnar", "Seller", 45m }
                 });
 
             migrationBuilder.InsertData(
@@ -72,9 +72,9 @@ namespace webblabb2distor.Migrations
                 columns: new[] { "Id", "AuctionId", "Bidamount", "Biddername", "Bidtime" },
                 values: new object[,]
                 {
-                    { -2, -2, 20000m, "Kalle", new DateTime(2024, 11, 23, 0, 0, 0, 0, DateTimeKind.Local) },
-                    { -1, -1, 35m, "byuer", new DateTime(2024, 11, 20, 0, 0, 0, 0, DateTimeKind.Local) },
-                    { 1, -1, 50m, "ferrari@gmail.com", new DateTime(2024, 11, 15, 12, 56, 51, 106, DateTimeKind.Local).AddTicks(3780) }
+                    { -2, -2, 20000m, "Kalle", new DateTime(2024, 12, 20, 0, 0, 0, 0, DateTimeKind.Local) },
+                    { -1, -1, 35m, "byuer", new DateTime(2024, 12, 17, 0, 0, 0, 0, DateTimeKind.Local) },
+                    { 1, -1, 50m, "ferrari@gmail.com", new DateTime(2024, 12, 12, 16, 52, 23, 178, DateTimeKind.Local).AddTicks(5343) }
                 });
 
             migrationBuilder.CreateIndex(

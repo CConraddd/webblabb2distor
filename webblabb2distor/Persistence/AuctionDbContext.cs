@@ -12,7 +12,6 @@ public class AuctionDbContext : DbContext
 
     public DbSet<BidsDb> BidsDbs { get; set; }
     public DbSet<AuctionDB> AuctionDbs { get; set; }
-    //public DbSet<UserDb> UserDbs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
